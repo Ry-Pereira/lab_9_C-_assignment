@@ -46,6 +46,13 @@ template <typename T> class Matrix{
     void swap_columns();
     void updated_matrix();
 };
+template <typename T> Matrix<T>::get_number_of_rows(){
+    return number_of_rows;
+}
+
+template <typename T> Matrix<T>::get_number_of_columns(){
+    return number_of_columns;
+}
 template <typename T> Matrix<T>::Matrix(int rows, int columns){
     number_of_rows = rows;
     number_of_columns = columns;
