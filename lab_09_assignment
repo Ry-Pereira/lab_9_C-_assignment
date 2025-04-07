@@ -34,15 +34,15 @@ template <typename T> class Matrice{
 		
 		int get_number_of_rows();
 		int get_number_of_columns();
-		int get_cell_value(int row, int column);
-		void store_cell_value(int row, int column, int value);
+		T get_cell_value(int row, int column);
+		void store_cell_value(int row, int column, T value);
 		void print_grid();
 		void add_matrices(Matrix<T>&other);
 		void multiply_matrices(Matrix<T>&other);
 		void sum_diagonal();
 		void swap_rows(int row1, int row2);
 		void swap_columns(int column1, int column2);
-		void updated_matrix_cell(int row. int column, int value);
+		void updated_matrix_cell(int row. int column, T value);
 
 		Matrix<T> operator+(Matrix<T>&other);
 		Matrix<T> operator*(Matrix<T>&other);
@@ -223,7 +223,110 @@ pair<Matrix,Matrix>create_matrices(){
 	return {matrix1,matrix2};
 }
 
+//Function that return a matrix with its rows swapped, takes in a matrix object, integer row num 1 and 2 as input
+Matrix swap_rows(Matrix matrix_1,int row_num_1,int row_num_2) {
+	//Matrix result matrix object is set to the matrix 1 object
+	Matrix result_matrix = matrix_1;
 
+
+	//If row num 1 is greater than matrix 1 number of rows, it is out of bounds
+	if(row_num_1> matrix_1.get_number_of_rows()) {
+		//Returns result matrix object
+		return result_matrix;
+	}
+	//If row num 2 is greater than matrix 1 number of rows, it is out of bounds
+	else if(row_num_2> matrix_1.get_number_of_rows()) {
+		//Returns result matrix object
+		return result_matrix;
+	}
+	//If row num 1 is lesser than 0, it is out of bounds
+	else if(row_num_1 < 0) {
+		//Returns result matrix object
+		return result_matrix;
+	}
+	//If row num 2 is lesser than 0, it is out of bounds
+	else if(row_num_2 < 0) {
+		//Returns result matrix object
+		return result_matrix;
+	}
+	//If rows are in bounds, swapping can be done for the rows
+	else {
+		//For in loop to iterate through each column
+		for(int column = 0; column< matrix_1.get_number_of_columns(); column++) {
+			//Declare and initialize value to the matrix1 at grid lcoation row num2 by column
+			int value = matrix_1.get_grid_value(row_num_2,column);
+			//Result matrix stores the value at the row num1 location at column with the value to swap it
+			result_matrix.store_value(row_num_1,column,value);
+		}
+		//For in loop to iterate through each column
+		for(int column = 0; column< matrix_1.get_number_of_columns(); column++) {
+			//Declare and initialize value to the matrix1 at grid lcoation row num1 by column
+			int value = matrix_1.get_grid_value(row_num_1,column);
+			//Result matrix stores the value at the row num2 location at column with the value to swap it
+			result_matrix.store_value(row_num_2,column,value);
+		}
+		//Returns the result matrix object with rows swapped
+		return result_matrix;
+	}
+}
+
+
+
+//ChatGpt helped me with finnding how to swap columns 
+
+//Function that return a matrix with its rows swapped, takes in a matrix object, integer column num 1 and 2 as input
+Matrix swap_columns(Matrix matrix_1,int column_num_1,int column_num_2) {
+	//Matrix result matrix object is set to the matrix 1 object
+	Matrix result_matrix = matrix_1;
+
+	//If column num 1 is greater than matrix 1 number of columns, its out of bounds
+	if(column_num_1> matrix_1.get_number_of_columns()) {
+		//Returns result matrix
+		return result_matrix;
+	}
+	//If column num 2 is greater than matrix 1 number of columns, its out of bounds
+	else if(column_num_2> matrix_1.get_number_of_columns()) {
+		//Returns result matrix
+		return result_matrix;
+	}
+	//If column num 1 lessser than 0, it is out of bounds
+	else if(column_num_1 < 0) {
+		//Returns result matrix
+		return result_matrix;
+	}
+	//If column num 2 lessser than 0, it is out of bounds
+	else if(column_num_2 < 0) {
+		//Returns result matrix
+		return result_matrix;
+	}
+	//If column number are in bound, swapping of columns can happen
+	else {
+		//For in loop to iterate through each row
+		for(int row = 0; row< matrix_1.get_number_of_rows(); row++) {
+			//Declare and initialize value to the matrix1 at grid lcoation row by column num2
+			int value = matrix_1.get_grid_value(row,column_num_2);
+			//Result matrix stores the value at the row  location at column num 1 with the value to swap it
+			result_matrix.store_value(row,column_num_1,value);
+		}
+		//For in loop to iterate through each row
+		for(int row = 0; row< matrix_1.get_number_of_rows(); row++) {
+			//Declare and initialize value to the matrix1 at grid lcoation row  by column num 1
+			int value = matrix_1.get_grid_value(row,column_num_1);
+			//Result matrix stores the value at the row  location at column num 2 with the value to swap it
+			result_matrix.store_value(row,column_num_2,value);
+		}
+		//Returns the result matrix object with columns swapped
+		return result_matrix;
+	}
+}
+
+//Function that returns a updated matrix object with integer row,column, and value passed in as argument to update matrix at row by column location with new value
+Matrix update_matrix(Matrix matrix,int row,int column, int value) {
+	//Matrix obejct executes the store value with row,column,value input passed in to store the value at that row by column location
+	matrix.store_value(row,column,value);
+	//Returns matrix object
+	return matrix;
+}
 
 
 
