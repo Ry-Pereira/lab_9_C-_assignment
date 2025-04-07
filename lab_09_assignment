@@ -1,0 +1,78 @@
+//Program Name: Problem 9: Matrix Function and Operations Program
+//Brief Description: This program will ask the user for a matrix text fiel and options choice for adding or multiplying matrices, finding the sum diagonal, swapping rows and columsn,a dn updating the matrix at row by cloumn locaiton.
+//Input: The input is a matrix text fileeither 1 nxn matrix or 2 nxn matrix with matrix sizes at the top to indicate the size of the matrix or matrices. A choice input will be put int to ask the user what Matrix funcion or operation needs to be executed based on their liking.
+//Ouput: The ouput will welcome the user and give a goodbye message to the user. Print a menu to the user. Print result matrices based on the choice, that they ask. The hcoice ouptu will dicatte what Matrix function or operation needs to executed.
+//All collaborators: None
+//Other Sources:Github Copilot and ChatGPT 
+//Author: Ryan Antony Pereira
+//Creation Date: 4/7/2025
+//Last Modified Date: 4/7/2025
+
+//ChatGPT helped with debuggin, pointing out errors, helping me correct my code.
+
+//Includes the iostream library file to include standard input and ouput for cin and cout
+#include <iostream>
+//Includes the C++ fstream libary for file input and output, open and close functionality
+#include <fstream>
+//Includes the C++ string library for string manipulation and implmentation
+#include <string>
+//Includes the C++ sstream library for file string parsing functionality
+#include <sstream>
+//Includes the C++ vector library for array manipulation and implementation
+#include <vector>
+//Using standard namespace to avoid using std:: prefix
+using namespace std;
+
+
+template <typename T> class Matrix{
+    private:
+        int number_of_rows;
+        int number_of_columns;
+        vector<vector<T>> grid;
+    public:
+    Matrix(int rows, int columns);
+    }
+    int get_number_of_rows();
+    int get_number_of_columns();
+
+    void store_numbers();
+    void create_matrix();
+    void create_matrixes();
+    void print_grid();
+    void add_matrices();
+    void multiply_matrices();
+    void sum_diagonal();
+    void swap_rows();
+    void swap_columns();
+    void updated_matrix();
+};
+template <typename T> Matrix<T>::Matrix(int rows, int columns){
+    number_of_rows = rows;
+    number_of_columns = columns;
+    grid.resize(rows, vector<T>(columns));
+}
+
+//Function,returns nothing, prints the menu for user to see what choice they want to make on what matrix operation they want to make
+void print_menu() {
+	//Prints ouput to terminal to prompt the user that choice 1 is for them to input a 2 nxn matrix text file to read and stores the matrixes separate and print them to the termianl
+	cout<<"1: Read values from a file into the matrix" << "\n";
+	//Prints ouput to terminal to prompt the user that choice 2 is for them to input a 2 nxn matrix text file to read and stores the matrixes, and perform an addition operation, and print the result to terminal
+	cout<<"2: Add two matrices and display the result" << "\n";
+	//Prints output to terminal to prompt the user that choice 3 is for them to input a 2 nxn matrix text file to read and stores the matrixes seperate, and perform a multiplication operation, and print the result to terminal.
+	cout<<"3: Multiply two matrices and display the result" << "\n";
+	//Prints output to termianl to prompt the user that chouce 4 is for them to input a 1 nxn matrix text file to read and stores the matrix, and print out the sum of the main and secondary diagonals of that matrix
+	cout<<"4: Get the sum of matrix diagonal elements" << "\n";
+	//Prints output to terminal to prompt the user that choice 5 is for them to input a 1 nxn matrix text file to read and stores the matrix, and swap the rows based on user input, and print out the result matrix of the row swapiing.
+	cout<<"5: Swap matrix rows and display the result" << "\n";
+	//Prints output to terminal to prompt the user that choice 6 is for them to input a 1 nxn matrix text file to read and stores the matrix, and swap the columns based on user input, and print out the result matrix of the column swapiing.0
+	cout<<"6: Swap matrix columns and display the result" << "\n";
+	//Prints output to terminal to prompt the user that choice 7 is for them to input a 1 nxn matrix text file to read and stores the matrix, and updates it by the users row,column, and value input and updates the matrix on that info, and prints out the reuslt matrix of that
+	cout<<"7: Update matrix  at row by column with new value and display the result" << "\n";
+}
+
+
+
+
+int main(){
+    cout<<"Hello! Welcome to the Matrix Function and Operations Program!"<<"\n";
+}
