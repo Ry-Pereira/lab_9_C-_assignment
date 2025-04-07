@@ -24,28 +24,31 @@
 using namespace std;
 
 
-template <typename T> class Matrix{
+template <typename T> class Matrice{
     private:
         int number_of_rows;
         int number_of_columns;
         vector<vector<T>> grid;
     public:
-    Matrix(int rows, int columns);
-    
-    int get_number_of_rows();
-    int get_number_of_columns();
-    int get_cell_value(int row, int column);
-    void store_cell_value(int row, int column, int value);
-    void create_matrix(string filename);
-    void create_matrixes(string filename);
-    void print_grid();
-    void add_matrices();
-    void multiply_matrices();
-    void sum_diagonal();
-    void swap_rows();
-    void swap_columns();
-    void updated_matrix();
+		Matrix(int rows, int columns);
+		
+		int get_number_of_rows();
+		int get_number_of_columns();
+		int get_cell_value(int row, int column);
+		void store_cell_value(int row, int column, int value);
+		void print_grid();
+		void add_matrices(Matrix<T>&other);
+		void multiply_matrices(Matrix<T>&other);
+		void sum_diagonal();
+		void swap_rows(int row1, int row2);
+		void swap_columns(int column1, int column2);
+		void updated_matrix_cell(int row. int column, int value);
+
+		Matrix<T> operator+(Matrix<T>&other);
+		Matrix<T> operator*(Matrix<T>&other);
 };
+
+
 
 template <typename T> Matrix<T>::Matrix(int rows, int columns){
     number_of_rows = rows;
@@ -91,77 +94,40 @@ template <typename T> Matrix<T>::print_grid(){
         cout<<"\n";
     }
 }
- Matrix create_matrice(){
-    //Declares string line to hol line of file
-	string line;
-	//Declares and initializes integer line number to 1 to keep track of the number of line there are
-	int line_number = 1;
-	//Declares and initializes integer current row to -1 to keep track of the placment of rows to matrices
-	int current_row=-1;
-	//Declares integer size of matrix to hold matrix size
-	int size_of_matrix;
-	//Matrix object matrix 1 is declared and initialized with with a 0,0 pair passed in to indicate the vector grid is 0,0 in size
-	Matrix matrix1(0,0);
 
-	//Opens the matrix text file in the matrix file ifstream object for reading and extracting information
-	ifstream matrix_file(matrix_text_file);
-	//The matrix file is opened
-	if (matrix_file.is_open()) {
-		//Continously goes through line by line in matrix file until there are no more lines to read
-		while (getline(matrix_file,line)) {
-			//If the line is not empty and the back of it contains a newline character, it removes it
-			if(!line.empty() && line.back() == '\n') {
-				//Removes the newline character at the end of the line
-				line.pop_back();
-			}
-			//If line number is 1, the matrix size number is there
-			if(line_number ==1) {
-				//Declares and intializes a stringstream object for parsing of the line
-				std::stringstream ss(line);
-				//Extracts the matrix size form the stirng stream object for storing in size of matrix
-				ss >> size_of_matrix;
-				//Declares and initializes rows to size of matrix
-				int rows = size_of_matrix;
-				//Declares and initializes columns to size of matrix
-				int columns = size_of_matrix;
-				//Declares and initializes matrix1 to Matrix object with rows and columns passed in
-				matrix1 = Matrix(rows,columns);
-			}
-			//Current row is not less than size of matrix, means the nex matrix needs to be stored with elements
-			else {
-				//Declares and intializes a stringstream object for parsing of the line
-				std::stringstream ss(line);
-				//Declares string cell element
-				string cell_element;
-				//Checks if line is not empty with the line size
-				if(line.size()-1) {
-					//If current row is within bound of size of matrix
-					if(current_row < size_of_matrix) {
-						//For in loop to iterate through each column
-						for(int column = 0; column<size_of_matrix; column++) {
-							////Gets the cell element until hitting a empty space and stores it in cell element
-							std::getline(ss,cell_element,' ');
-							//Declares and initializes cell element convert to integer
-							int value = stoi(cell_element);
-							//matrix 1 object executes the store value function with current row and colum with value passed in to store that value in the row by colum ni grid of matrix1
-							matrix1.store_value(current_row,column,value);
-						}
-					}
-				}
-				//Current row is incremented
-				current_row++;
-			}
-			//Line number is incremented
-			line_number++;
-		}
+template<typename T>Matrix<T>::sum_diagonal(){
+	//Declare and initializes column number to 0
+	int column_number = 0;
+	//Declares and initializes matrix 1 result main sum to 0
+	int matrix_1_result_main_sum = 0;
+	//Declares and initializes matrix 1 result secondary sum to 0
+	int matrix_1_result_secondary_sum = 0;
+
+	//For in loop to iterate through each row n matrix 1 number of rows
+	for(int row = 0; row < matrix_1.get_number_of_rows(); row++) {
+		//Matrix 1 result main sum is incremeneted by the value at matrix 1 gird at location row  by column number
+		matrix_1_result_main_sum+= matrix_1.get_grid_value(row,column_number);
+		//Column number is incremented
+		column_number++;
 	}
-	//Matrix file is closed
-	matrix_file.close();
-	//Returns matrix 1 object
-	return matrix1;
+
+	//Column number is set to matrix 1 number of columns minus by 1
+	column_number = matrix_1.get_number_of_columns()-1;
+	//For in loop to iterate through each row n matrix 1 number of rows
+	for(int row = 0; row < matrix_1.get_number_of_rows(); row++) {
+		//Matrix 1 result main sum is incremeneted by the value at matrix 1 gird at location row  by column number
+		matrix_1_result_secondary_sum+= matrix_1.get_grid_value(row,column_number);
+		//Column number is decremented
+		column_number--;
+	}
+	//Prints ouput to terminal the Matrix main diagonal sum 
+	cout<<"Matrix Main Diagonal Sum " << matrix_1_result_main_sum << "\n";
+	//Prints ouput to terminal the Matrix secondary diagonal sum 
+	cout<<"Matrix Secondary Diagonal Sum"<< matrix_1_result_secondary_sum << "\n";
 }
 
-pair<Matrix>create_matrices(){
+
+pair<Matrix,Matrix>create_matrices(){
     //Declares string line to hol line of file
 	string line;
 	//Declares and initializes integer line number to 1 to keep track of the number of line there are
