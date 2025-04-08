@@ -179,7 +179,7 @@ pair<Matrix<T>,Matrix<T>>create_matrices(string& matrix_text_file){
 							//Declares and initializes cell element convert to integer
 							int value = stoi(cell_element);
 							//matrix 1 object executes the store value function with current row and colum with value passed in to store that value in the row by colum ni grid of matrix1
-							matrix1.store_value(current_row,column,value);
+							matrix1.store_cell_value(current_row,column,value);
 						}
 						//If the current row is equal to size of matrix, the next matrix is to be stored with the other elements
 						if(current_row == size_of_matrix) {
@@ -196,7 +196,7 @@ pair<Matrix<T>,Matrix<T>>create_matrices(string& matrix_text_file){
 							//Declares and initializes cell element convert to integer
 							int value = stoi(cell_element);
 							//matrix 2 object executes the store value function with current matrix 2 row and colum with value passed in to store that value in the row by colum ni grid of matrix2
-							matrix2.store_value(current_matrix_2_row ,column,value);
+							matrix2.store_cell_value(current_matrix_2_row ,column,value);
 						}
 						//current matrix 2 row is incremented
 						current_matrix_2_row ++;
@@ -327,7 +327,11 @@ void choice_selection() {
     cout<<"Enter Matrix Text File";
     cin >> matrix_text_file;
     
-	pair<Matrix<int>,Matrix<int>> matrices = create_matrices(matrix_text_file);
+	pair<Matrix<int>,Matrix<int>> matrices = create_matrices<int>(matrix_text_file);
+	Matrix<int> matrix_1= matrices.first;
+	Matrix<int> matrix_2= matrices.second;
+	matrix_1.print_grid();
+	matrix_2.print_grid();
 	
 }
 
@@ -338,5 +342,4 @@ int main(){
     choice_selection();
     cout<<"Program Has Ended! Goodbye!"<<"\n";
     return 0;
-
 }
