@@ -10,6 +10,7 @@
 
 //ChatGPT helped with debuggin, pointing out errors, helping me correct my code.
 
+
 //Includes the iostream library file to include standard input and ouput for cin and cout
 #include <iostream>
 //Includes the C++ fstream libary for file input and output, open and close functionality
@@ -24,7 +25,7 @@
 using namespace std;
 
 
-template <typename T> class Matrice{
+template <typename T> class Matrix{
     private:
         int number_of_rows;
         int number_of_columns;
@@ -35,14 +36,17 @@ template <typename T> class Matrice{
 		int get_number_of_rows();
 		int get_number_of_columns();
 		T get_cell_value(int row, int column);
+
+
 		void store_cell_value(int row, int column, T value);
+		
 		void print_grid();
 		void add_matrices(Matrix<T>&other);
 		void multiply_matrices(Matrix<T>&other);
 		void sum_diagonal();
 		void swap_rows(int row1, int row2);
 		void swap_columns(int column1, int column2);
-		void updated_matrix_cell(int row. int column, T value);
+		void updated_matrix_cell(int row, int column, T value);
 
 		Matrix<T> operator+(Matrix<T>&other);
 		Matrix<T> operator*(Matrix<T>&other);
@@ -56,23 +60,23 @@ template <typename T> Matrix<T>::Matrix(int rows, int columns){
     grid.resize(rows, vector<T>(columns));
 }
 
-template <typename T> Matrix<T>::get_number_of_rows(){
+template <typename T> int Matrix<T>::get_number_of_rows(){
     return number_of_rows;
 }
 
-template <typename T> Matrix<T>::get_number_of_columns(){
+template <typename T> int Matrix<T>::get_number_of_columns(){
     return number_of_columns;
 }
 
-template <typename T> Matrix<T>::get_cell_value(int row, int column){
+template <typename T> T Matrix<T>::get_cell_value(int row, int column){
     return grid[row][column];
 }
 
-template <typename T> Matrix<T>::store_cell_value(int row, int column, int value){
+template <typename T> void Matrix<T>::store_cell_value(int row, int column, T value){
     grid[row][column] = value;
 }
 
-template <typename T> Matrix<T>::print_grid(){
+template <typename T> void Matrix<T>::print_grid(){
     cout<< "Column ";
     //For in loop to iterate through eaach column and print a number to indicate position of cell
     for(int column = 1; column < number_of_columns+1; column++){
@@ -95,7 +99,7 @@ template <typename T> Matrix<T>::print_grid(){
     }
 }
 
-template<typename T>Matrix<T>::sum_diagonal(){
+template<typename T>void Matrix<T>::sum_diagonal(){
 	//Declare and initializes column number to 0
 	int column_number = 0;
 	//Declares and initializes matrix 1 result main sum to 0
@@ -104,7 +108,7 @@ template<typename T>Matrix<T>::sum_diagonal(){
 	int matrix_1_result_secondary_sum = 0;
 
 	//For in loop to iterate through each row n matrix 1 number of rows
-	for(int row = 0; row < matrix_1.get_number_of_rows(); row++) {
+	for(int row = 0; row < Matrix.get_number_of_rows(); row++) {
 		//Matrix 1 result main sum is incremeneted by the value at matrix 1 gird at location row  by column number
 		matrix_1_result_main_sum+= matrix_1.get_grid_value(row,column_number);
 		//Column number is incremented
