@@ -9,8 +9,18 @@
 #include <sstream>
 //Includes the C++ vector library for array manipulation and implementation
 #include <vector>
+#include <type_traits>
 //Using standard namespace to avoid using std:: prefix
 using namespace std;
+// Template function to convert a string to a specified type (T)
+
+template <typename T> T stringToType(const string& string){
+    stringstream ss(string);
+    T result_value;
+    ss>> result_value;
+    return result;
+    
+}
 
 
 template <typename T> class Matrix{
@@ -77,7 +87,7 @@ template <typename T> void Matrix<T>::print_grid(){
     //For in loop to iterate throguh each row
     for(int row= 0; row<number_of_rows; row++) {
         //Pritns to terminal ouput the Row and number wiht a | to indicate barreier spacing and cell location
-        cout<< "Row "<<row << "| ";
+        cout<< "Row "<<row + 1 << "| ";
         //For in loop to iterate through each columns
         for(int column = 0; column < number_of_columns; column++) {
             //Prints to terminal ouput the value at grid of row by column location witha  space
@@ -88,28 +98,28 @@ template <typename T> void Matrix<T>::print_grid(){
     }
 }
 
-template<typename T>void Matrix<T>::sum_diagonal(){
+template <typename T>Matrix<T> sum_diagonal(Matrix<T> matrix){
 	//Declare and initializes column number to 0
 	int column_number = 0;
 	//Declares and initializes matrix 1 result main sum to 0
-	int matrix_result_main_sum = 0;
+	T matrix_result_main_sum = 0;
 	//Declares and initializes matrix 1 result secondary sum to 0
-	int matrix_result_secondary_sum = 0;
+	T matrix_result_secondary_sum = 0;
 
 	//For in loop to iterate through each row n matrix 1 number of rows
-	for(int row = 0; row < get_number_of_rows(); row++) {
+	for(int row = 0; row < matrix.get_number_of_rows(); row++) {
 		//Matrix 1 result main sum is incremeneted by the value at matrix 1 gird at location row  by column number
-		matrix_result_main_sum+= get_cell_value(row,column_number);
+		matrix_result_main_sum+=matrix.get_cell_value(row,column_number);
 		//Column number is incremented
 		column_number++;
 	}
 
 	//Column number is set to matrix 1 number of columns minus by 1
-	column_number = get_number_of_columns()-1;
+	column_number = matrix.get_number_of_columns()-1;
 	//For in loop to iterate through each row n matrix 1 number of rows
-	for(int row = 0; row < get_number_of_rows(); row++) {
+	for(int row = 0; row < matrix.get_number_of_rows(); row++) {
 		//Matrix 1 result main sum is incremeneted by the value at matrix 1 gird at location row  by column number
-		matrix_result_secondary_sum+= get_cell_value(row,column_number);
+		matrix_result_secondary_sum+= matrix.get_cell_value(row,column_number);
 		//Column number is decremented
 		column_number--;
 	}
@@ -120,6 +130,7 @@ template<typename T>void Matrix<T>::sum_diagonal(){
 }
 
 template <typename T>pair<Matrix<T>,Matrix<T>>create_matrices(string& matrix_text_file){
+    cout << "In and our with type: " << typeid(T).name() << "\n";
     //Declares string line to hol line of file
 	string line;
 	//Declares and initializes integer line number to 1 to keep track of the number of line there are
@@ -156,23 +167,15 @@ template <typename T>pair<Matrix<T>,Matrix<T>>create_matrices(string& matrix_tex
 				ss >> size_of_matrix;
 				cout<<"Size of Matrix: "<<size_of_matrix<<"\n";
 				ss >> type_flag;
-				cout<<"Type: "<<type_flag<<"\n";
 				//Declares and initializes rows to size of matrix
+				
 				int rows = size_of_matrix;
 				//Declares and initializes columns to size of matrix
 				int columns = size_of_matrix;
-				if(type_flag == 0){
-				    //Declares and initializes matrix1 to Matrix object with rows and columns passed in
-				matrix1 = Matrix<int>(rows,columns);
-				//Declares and initializes matrix2 to Matrix object with rows and columns passed in
-				matrix2 = Matrix<int>(rows,columns);
-				}
-				else{
-				   //Declares and initializes matrix1 to Matrix object with rows and columns passed in
-				matrix1 = Matrix<double>(rows,columns);
-				//Declares and initializes matrix2 to Matrix object with rows and columns passed in
-				matrix2 = Matrix<double>(rows,columns);
-				}
+    			matrix1 = Matrix<T>(rows,columns);
+    			//Declares and initializes matrix2 to Matrix object with rows and columns passed in
+    			matrix2 = Matrix<T>(rows,columns);
+				
 				
 			}
 			//If the line number is not 1, then the rest of the lines are Matrix numbers to be stored
@@ -189,14 +192,9 @@ template <typename T>pair<Matrix<T>,Matrix<T>>create_matrices(string& matrix_tex
 						for(int column = 0; column<size_of_matrix; column++) {
 							//Gets the cell element until hitting a empty space and stores it in cell element
 							std::getline(ss,cell_element,' ');
-							if(type_flag == 0){
-							   int value = stoi(cell_element);
-							   matrix1.store_cell_value(current_row,column,value);
-							}
-							else{
-							  double value = stod(cell_element); 
-							  matrix1.store_cell_value(current_row,column,value);
-							}
+							T value = stringToType<T>(cell_element);
+							matrix1.store_cell_value(current_row,column,value);
+							
 						}
 						//If the current row is equal to size of matrix, the next matrix is to be stored with the other elements
 						if(current_row == size_of_matrix) {
@@ -210,15 +208,9 @@ template <typename T>pair<Matrix<T>,Matrix<T>>create_matrices(string& matrix_tex
 						for(int column = 0; column<size_of_matrix; column++) {
 							////Gets the cell element until hitting a empty space and stores it in cell element
 							std::getline(ss,cell_element,' ');
-							if(type_flag == 0){
-							    int value = stoi(cell_element);
-							    matrix2.store_cell_value(current_matrix_2_row ,column,value);
-							    
-							}
-							else{
-							    double value = stod(cell_element);
-							    matrix2.store_cell_value(current_matrix_2_row ,column,value);
-							}
+							T value = stringToType<T>(cell_element);
+							matrix2.store_cell_value(current_matrix_2_row ,column,value);
+							
 						}
 						//current matrix 2 row is incremented
 						current_matrix_2_row ++;
@@ -237,9 +229,9 @@ template <typename T>pair<Matrix<T>,Matrix<T>>create_matrices(string& matrix_tex
 	return {matrix1,matrix2};
 }
 
-//Function that return a matrix with its rows swapped, takes in a matrix object, integer row num 1 and 2 as input
-template <typename T>Matrix<T> swap_rows(Matrix<T> matrix_1,int row_num_1,int row_num_2) {
-	//Matrix result matrix object is set to the matrix 1 object
+class IntegerMatrix: public Matrix{
+    void swap_rows(int col,int col2)ovveride{
+        //Matrix result matrix object is set to the matrix 1 object
 	Matrix<T> result_matrix = matrix_1;
 
 
@@ -282,15 +274,12 @@ template <typename T>Matrix<T> swap_rows(Matrix<T> matrix_1,int row_num_1,int ro
 		//Returns the result matrix object with rows swapped
 		return result_matrix;
 	}
-}
-
-
-
-//ChatGpt helped me with finnding how to swap columns 
-
-//Function that return a matrix with its rows swapped, takes in a matrix object, integer column num 1 and 2 as input
+    void swap(rows){
+        //Function that return a matrix with its rows swapped, takes in a matrix object, integer column num 1 and 2 as input
 template <typename T>Matrix<T>  swap_columns(Matrix<T> matrix_1,int column_num_1,int column_num_2) {
 	//Matrix result matrix object is set to the matrix 1 object
+	column_num_1--;
+	column_num_2--;
 	Matrix<T> result_matrix = matrix_1;
 
 	//If column num 1 is greater than matrix 1 number of columns, its out of bounds
@@ -318,41 +307,60 @@ template <typename T>Matrix<T>  swap_columns(Matrix<T> matrix_1,int column_num_1
 		//For in loop to iterate through each row
 		for(int row = 0; row< matrix_1.get_number_of_rows(); row++) {
 			//Declare and initialize value to the matrix1 at grid lcoation row by column num2
-			int value = matrix_1.get_grid_value(row,column_num_2);
+			T value = matrix_1.get_cell_value(row,column_num_2);
 			//Result matrix stores the value at the row  location at column num 1 with the value to swap it
-			result_matrix.store_value(row,column_num_1,value);
+			result_matrix.store_cell_value(row,column_num_1,value);
 		}
 		//For in loop to iterate through each row
 		for(int row = 0; row< matrix_1.get_number_of_rows(); row++) {
 			//Declare and initialize value to the matrix1 at grid lcoation row  by column num 1
-			int value = matrix_1.get_grid_value(row,column_num_1);
+			T value = matrix_1.get_cell_value(row,column_num_1);
 			//Result matrix stores the value at the row  location at column num 2 with the value to swap it
-			result_matrix.store_value(row,column_num_2,value);
+			result_matrix.store_cell_value(row,column_num_2,value);
 		}
 		//Returns the result matrix object with columns swapped
 		return result_matrix;
 	}
 }
+    }
+}
+
+
+
+
+//ChatGpt helped me with finnding how to swap columns 
+
+
 
 //Function that returns a updated matrix object with integer row,column, and value passed in as argument to update matrix at row by column location with new value
-template <typename T>Matrix<T>  update_matrix(Matrix<T> matrix,int row,int column, int value) {
+template <typename T>Matrix<T>  update_matrix(Matrix<T> matrix,int row,int column, T value) {
 	//Matrix obejct executes the store value with row,column,value input passed in to store the value at that row by column location
-	matrix.store_value(row,column,value);
+	matrix.store_cell_value(row,column,value);
 	//Returns matrix object
 	return matrix;
 }
 
 
 
-template <typename T>
-void choice_selection() {
-	//pair<Matrix<T>,Matrix<T>> matrices = create_matrices<T>(matrix_text_file);
-//	Matrix<T> matrix_1= matrices.first;
-//	Matrix<T> matrix_2= matrices.second;
-//	matrix_1.print_grid();
-//	matrix_2.print_grid();
+
+
+template <typename T> void choice_selection(string matrix_text_file) {
+    cout << "In and out with type: " << typeid(T).name() << "\n";
+	pair<Matrix<T>,Matrix<T>> matrices = create_matrices<T>(matrix_text_file);
+	Matrix<T> matrix_1= matrices.first;
+	Matrix<T> matrix_2= matrices.second;
+	
+	matrix_1.print_grid();
+	matrix_2.print_grid();
+	cout<<"\n";
+	matrix_1 = swap_columns(matrix_1,1,2);
+	
+	cout<<"Result"<<"\n\n";
+	matrix_1.print_grid();
 	
 }
+
+
 
 
 
@@ -363,27 +371,40 @@ int main(){
     string matrix_text_file;
     cout<<"Enter Matrix _text file";
     cin>>matrix_text_file;
+    
     ifstream file(matrix_text_file);
     string first_line;
     string matrix_size;
     string type;
+    
     string line;
     int line_count = 0;
+    
     while(getline(file,line)){
         line_count++;
     }
     file.clear();
     file.seekg(0);
+    
     if(getline(file,first_line)){
         std::stringstream ss(first_line);
         ss>>matrix_size;
+        int size_of_matrix = stoi(matrix_size);
         ss>>type;
         cout<<type<<"\n";
-        
-    
     }
     file.close();
     cout<<line_count<<"\n";
+    
+    if(type == "0"){
+        choice_selection<int>(matrix_text_file);
+    }
+    else if(type == "1"){
+        choice_selection<double>(matrix_text_file);
+    }
+    else{
+        cout<<"Invald"<<"\n";
+    }
     
     
     cout<<"\n";
