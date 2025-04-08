@@ -1,15 +1,3 @@
-//Program Name: Problem 9: Matrix Function and Operations Program
-//Brief Description: This program will ask the user for a matrix text fiel and options choice for adding or multiplying matrices, finding the sum diagonal, swapping rows and columsn,a dn updating the matrix at row by cloumn locaiton.
-//Input: The input is a matrix text fileeither 1 nxn matrix or 2 nxn matrix with matrix sizes at the top to indicate the size of the matrix or matrices. A choice input will be put int to ask the user what Matrix funcion or operation needs to be executed based on their liking.
-//Ouput: The ouput will welcome the user and give a goodbye message to the user. Print a menu to the user. Print result matrices based on the choice, that they ask. The hcoice ouptu will dicatte what Matrix function or operation needs to executed.
-//All collaborators: None
-//Other Sources:Github Copilot and ChatGPT 
-//Author: Ryan Antony Pereira
-//Creation Date: 4/7/2025
-//Last Modified Date: 4/7/2025
-
-//ChatGPT helped with debuggin, pointing out errors, helping me correct my code.
-
 
 //Includes the iostream library file to include standard input and ouput for cin and cout
 #include <iostream>
@@ -44,9 +32,9 @@ template <typename T> class Matrix{
 		void add_matrices(Matrix<T>&other);
 		void multiply_matrices(Matrix<T>&other);
 		void sum_diagonal();
-		void swap_rows(int row1, int row2);
-		void swap_columns(int column1, int column2);
-		void updated_matrix_cell(int row, int column, T value);
+		Matrix<T> swap_rows(int row1, int row2);
+		Matrix<T> swap_columns(int column1, int column2);
+		Matrix<T> updated_matrix_cell(int row, int column, T value);
 
 		Matrix<T> operator+(Matrix<T>&other);
 		Matrix<T> operator*(Matrix<T>&other);
@@ -103,35 +91,35 @@ template<typename T>void Matrix<T>::sum_diagonal(){
 	//Declare and initializes column number to 0
 	int column_number = 0;
 	//Declares and initializes matrix 1 result main sum to 0
-	int matrix_1_result_main_sum = 0;
+	int matrix_result_main_sum = 0;
 	//Declares and initializes matrix 1 result secondary sum to 0
-	int matrix_1_result_secondary_sum = 0;
+	int matrix_result_secondary_sum = 0;
 
 	//For in loop to iterate through each row n matrix 1 number of rows
-	for(int row = 0; row < Matrix.get_number_of_rows(); row++) {
+	for(int row = 0; row < get_number_of_rows(); row++) {
 		//Matrix 1 result main sum is incremeneted by the value at matrix 1 gird at location row  by column number
-		matrix_1_result_main_sum+= matrix_1.get_grid_value(row,column_number);
+		matrix_result_main_sum+= get_cell_value(row,column_number);
 		//Column number is incremented
 		column_number++;
 	}
 
 	//Column number is set to matrix 1 number of columns minus by 1
-	column_number = matrix_1.get_number_of_columns()-1;
+	column_number = get_number_of_columns()-1;
 	//For in loop to iterate through each row n matrix 1 number of rows
-	for(int row = 0; row < matrix_1.get_number_of_rows(); row++) {
+	for(int row = 0; row < get_number_of_rows(); row++) {
 		//Matrix 1 result main sum is incremeneted by the value at matrix 1 gird at location row  by column number
-		matrix_1_result_secondary_sum+= matrix_1.get_grid_value(row,column_number);
+		matrix_result_secondary_sum+= get_cell_value(row,column_number);
 		//Column number is decremented
 		column_number--;
 	}
 	//Prints ouput to terminal the Matrix main diagonal sum 
-	cout<<"Matrix Main Diagonal Sum " << matrix_1_result_main_sum << "\n";
+	cout<<"Matrix Main Diagonal Sum " << matrix_result_main_sum << "\n";
 	//Prints ouput to terminal the Matrix secondary diagonal sum 
-	cout<<"Matrix Secondary Diagonal Sum"<< matrix_1_result_secondary_sum << "\n";
+	cout<<"Matrix Secondary Diagonal Sum"<< matrix_result_secondary_sum << "\n";
 }
 
-
-pair<Matrix,Matrix>create_matrices(){
+template <typename T>
+pair<Matrix<T>,Matrix<T>>create_matrices(string& matrix_text_file){
     //Declares string line to hol line of file
 	string line;
 	//Declares and initializes integer line number to 1 to keep track of the number of line there are
@@ -143,9 +131,9 @@ pair<Matrix,Matrix>create_matrices(){
 	//Declares integer size of matrix to hold matrix size
 	int size_of_matrix;
 	//Matrix object matrix 1 is declared and initialized with with a 0,0 pair passed in to indicate the vector grid is 0,0 in size
-	Matrix matrix1(0,0);
+	Matrix<T> matrix1(0,0);
 	//Matrix object matrix 2 is declared and initialized with with a 0,0 pair passed in to indicate the vector grid is 0,0 in size
-	Matrix matrix2(0,0);
+	Matrix<T> matrix2(0,0);
 
 	//Opens the matrix text file in the matrix file ifstream object for reading and extracting information
 	ifstream matrix_file(matrix_text_file);
@@ -170,9 +158,9 @@ pair<Matrix,Matrix>create_matrices(){
 				//Declares and initializes columns to size of matrix
 				int columns = size_of_matrix;
 				//Declares and initializes matrix1 to Matrix object with rows and columns passed in
-				matrix1 = Matrix(rows,columns);
+				matrix1 = Matrix<T>(rows,columns);
 				//Declares and initializes matrix2 to Matrix object with rows and columns passed in
-				matrix2 = Matrix(rows,columns);
+				matrix2 = Matrix<T>(rows,columns);
 			}
 			//If the line number is not 1, then the rest of the lines are Matrix numbers to be stored
 			else {
@@ -228,9 +216,9 @@ pair<Matrix,Matrix>create_matrices(){
 }
 
 //Function that return a matrix with its rows swapped, takes in a matrix object, integer row num 1 and 2 as input
-Matrix swap_rows(Matrix matrix_1,int row_num_1,int row_num_2) {
+template <typename T>Matrix<T> swap_rows(Matrix<T> matrix_1,int row_num_1,int row_num_2) {
 	//Matrix result matrix object is set to the matrix 1 object
-	Matrix result_matrix = matrix_1;
+	Matrix<T> result_matrix = matrix_1;
 
 
 	//If row num 1 is greater than matrix 1 number of rows, it is out of bounds
@@ -279,9 +267,9 @@ Matrix swap_rows(Matrix matrix_1,int row_num_1,int row_num_2) {
 //ChatGpt helped me with finnding how to swap columns 
 
 //Function that return a matrix with its rows swapped, takes in a matrix object, integer column num 1 and 2 as input
-Matrix swap_columns(Matrix matrix_1,int column_num_1,int column_num_2) {
+template <typename T>Matrix<T>  swap_columns(Matrix<T> matrix_1,int column_num_1,int column_num_2) {
 	//Matrix result matrix object is set to the matrix 1 object
-	Matrix result_matrix = matrix_1;
+	Matrix<T> result_matrix = matrix_1;
 
 	//If column num 1 is greater than matrix 1 number of columns, its out of bounds
 	if(column_num_1> matrix_1.get_number_of_columns()) {
@@ -325,7 +313,7 @@ Matrix swap_columns(Matrix matrix_1,int column_num_1,int column_num_2) {
 }
 
 //Function that returns a updated matrix object with integer row,column, and value passed in as argument to update matrix at row by column location with new value
-Matrix update_matrix(Matrix matrix,int row,int column, int value) {
+template <typename T>Matrix<T>  update_matrix(Matrix<T> matrix,int row,int column, int value) {
 	//Matrix obejct executes the store value with row,column,value input passed in to store the value at that row by column location
 	matrix.store_value(row,column,value);
 	//Returns matrix object
@@ -334,271 +322,18 @@ Matrix update_matrix(Matrix matrix,int row,int column, int value) {
 
 
 
-//Function,returns nothing, prints the menu for user to see what choice they want to make on what matrix operation they want to make
-void print_menu() {
-	//Prints ouput to terminal to prompt the user that choice 1 is for them to input a 2 nxn matrix text file to read and stores the matrixes separate and print them to the termianl
-	cout<<"1: Read values from a file into the matrix" << "\n";
-	//Prints ouput to terminal to prompt the user that choice 2 is for them to input a 2 nxn matrix text file to read and stores the matrixes, and perform an addition operation, and print the result to terminal
-	cout<<"2: Add two matrices and display the result" << "\n";
-	//Prints output to terminal to prompt the user that choice 3 is for them to input a 2 nxn matrix text file to read and stores the matrixes seperate, and perform a multiplication operation, and print the result to terminal.
-	cout<<"3: Multiply two matrices and display the result" << "\n";
-	//Prints output to termianl to prompt the user that chouce 4 is for them to input a 1 nxn matrix text file to read and stores the matrix, and print out the sum of the main and secondary diagonals of that matrix
-	cout<<"4: Get the sum of matrix diagonal elements" << "\n";
-	//Prints output to terminal to prompt the user that choice 5 is for them to input a 1 nxn matrix text file to read and stores the matrix, and swap the rows based on user input, and print out the result matrix of the row swapiing.
-	cout<<"5: Swap matrix rows and display the result" << "\n";
-	//Prints output to terminal to prompt the user that choice 6 is for them to input a 1 nxn matrix text file to read and stores the matrix, and swap the columns based on user input, and print out the result matrix of the column swapiing.0
-	cout<<"6: Swap matrix columns and display the result" << "\n";
-	//Prints output to terminal to prompt the user that choice 7 is for them to input a 1 nxn matrix text file to read and stores the matrix, and updates it by the users row,column, and value input and updates the matrix on that info, and prints out the reuslt matrix of that
-	cout<<"7: Update matrix  at row by column with new value and display the result" << "\n";
-}
-
 void choice_selection() {
-	//Declares integer choice
-	int choice;
-	//Prints ouput to terminal to prompt the user for a choice input
-	cout<<"Choice: ";
-	//Stores user input in choice
-	cin  >> choice;
-	//Declares string matrix numbers text file name
-	string matrix_numbers_text_file_name;
-	//Declares and initializes matrix1 matrix object witha  grid size of 0 and 0 indicated by those arguments passed in
-	Matrix matrix1(0,0);
-	//Declares and initializes matrix2 matrix object witha  grid size of 0 and 0 indicated by those arguments passed in
-	Matrix matrix2(0,0);
-	//Declares and initializes result matrix object witha  grid size of 0 and 0 indicated by those arguments passed in
-	Matrix result_matrix(0,0);
-	//Declares and initializes matrix matrix object witha  grid size of 0 and 0 indicated by those arguments passed in
-	Matrix matrix(0,0);
-
-	//Swtich case statement with choice passed in as argument, to check what choice was made, and what operation to execute
-	switch(choice) {
-	//If choice case is integer 1, Choice 1 is executed for a given 2 nxn matrix, to print the two matrices
-	case 1:
-	{
-		//Prints ouput to terminal for the user to be prompted the Matrix Numbers Text File name
-		cout<<"Enter 2 nxn Matrix Numbers Text File Name: ";
-		//Stores the user input into matrix numbers text file name
-		cin >> matrix_numbers_text_file_name;
-		//matrices pair stores result ouput of the executed function called create matrices with matrix numbers text filename passed in as argument this gives two matrixes
-		pair<Matrix,Matrix> matrices = create_matrices(matrix_numbers_text_file_name);
-		//Matrix1 is set to the first of the matrices pair
-		matrix1 = matrices.first;
-		//Matrix2 is set to the second of the matrices pair
-		matrix2 = matrices.second;
-		//Prints output termianl the printed matrix 1 grid
-		cout<< "Matrix 1: \n";
-		//Result matrix object executes the print grid function
-		matrix1.print_grid();
-		//Printed outout to terminal some newline spacing
-		cout<< "\n";
-		//Prints output termianl the printed matrix 1 grid
-		cout<< "Matrix 2: \n";
-		//Result matrix object executes the print grid function
-		matrix2.print_grid();
-		//Break statement to get of switch case statement
-		break;
-	}
-	//If choice case is integer 2, Choice 2 is executed for a given 2 nxn matrix, add the two matrices
-	case 2:
-	{
-		//Prints ouput to terminal for the user to be prompted the Matrix Numbers Text File name
-		cout<<"Enter 2 nxn Matrix Numbers Text File Name: ";
-		//Stores the user input into matrix numbers text file name
-		cin >> matrix_numbers_text_file_name;
-		//matrices pair stores result ouput of the executed function called create matrices with matrix numbers text filename passed in as argument this gives two matrixes
-		pair<Matrix,Matrix> matrices = create_matrices(matrix_numbers_text_file_name);
-		//Matrix1 is set to the first of the matrices pair
-		matrix1 = matrices.first;
-		//Matrix2 is set to the second of the matrices pair
-		matrix2 = matrices.second;
-		//Result matrix is a stores result matrix from the ouput of the executed add matrices function with matrix 1 and 2 passed in as argument
-		result_matrix = add_matrices(matrix1,matrix2);
-		//Prints ouput to terminal the result output
-		cout<<"Result: \n";
-		//Result matrix object executes the print grid function
-		result_matrix.print_grid();
-		//Break statement to get of switch case statement
-		break;
-	}
-	//If choice case is integer 3, Choice 3 is executed for a given 2 nxn matrix,  to multiply the two matrices
-	case 3:
-	{
-		//Prints ouput to terminal for the user to be prompted the Matrix Numbers Text File name
-		cout<<"Enter 2 nxn Matrix Numbers Text File Name: ";
-		//Stores the user input into matrix numbers text file name
-		cin >> matrix_numbers_text_file_name;
-		//matrices pair stores result ouput of the executed function called create matrices with matrix numbers text filename passed in as argument this gives two matrixes
-		pair<Matrix,Matrix> matrices = create_matrices(matrix_numbers_text_file_name);
-		//Matrix1 is set to the first of the matrices pair
-		matrix1 = matrices.first;
-		//Matrix2 is set to the second of the matrices pair
-		matrix2 = matrices.second;
-		//Result matrix is a stores result matrix from the ouput of the executed multiply matrices function with matrix 1 and 2 passed in as argument
-		result_matrix = multiply_matrices(matrix1,matrix2);
-		//Prints ouput to terminal the result output
-		cout<<"Result: \n";
-		//Result matrix object executes the print grid function
-		result_matrix.print_grid();
-		//Break statement to get of switch case statement
-		break;
-	}
-	//If choice case is integer 4, Choice 4 is executed for a given matrix, to coutned for the sum of its main and secondary diagonal sum, to be printed to the user
-	case 4:
-	{
-		//Prints ouput to terminal for the user to be prompted the Matrix Numbers Text File name
-		cout<<"Enter Single nxn Matrix Numbers Text File Name: ";
-		//Stores the user input into matrix numbers text file name
-		cin >> matrix_numbers_text_file_name;
-		//matrix stores result ouput of the executed function called create matrice with matrix numbers text filename passed in as argument
-		matrix = create_matrice(matrix_numbers_text_file_name);
-		//Sum diagoanl function is executed with matrix input passed in as arugment to count up the main and secodnary sum diagonal
-		sum_diagonal(matrix);
-		//Break statement to get of switch case statement
-		break;
-	}
-	//If choice case is integer 5, Choice 5 is executed for a given matrix to swap row values, and be printed to terminal
-	case 5:
-	{
-		//Prints ouput to terminal for the user to be prompted the Matrix Numbers Text File name
-		cout<<"Enter Single nxn Matrix Numbers Text File Name: ";
-		//Stores the user input into matrix numbers text file name
-		cin >> matrix_numbers_text_file_name;
-		//matrix stores result ouput of the executed function called create matrice with matrix numbers text filename passed in as argument
-		matrix = create_matrice(matrix_numbers_text_file_name);
-		//Declares integer row1
-		int row1;
-		//Declares integer row2
-		int row2;
-		//Prints ouput to terminal to prompt the user for a Row 1 number to Swap
-
-		
-		cout<<"Enter Row 1 to Swap";
-		//Stores user input in row1
-		cin >> row1;
-		//Prints ouput to terminal to prompt the user for a Row 2 number to Swap
-		cout<<"Enter Row 2 to Swap";
-		//Stores user input in row2
-		cin >> row2;
-
-		//Checks to see if row1 and row2 is out of bounds
-		if(row1-1 < 0 || row1-1 > matrix.get_number_of_rows() || row2-1 < 0 || row2-1 > matrix.get_number_of_rows() ){
-			//Prints to terminal that the Row number is out of bounds
-			cout<<"Row number is out of bounds"<< "\n";
-			//Break out of switch case
-			break;
-		}
-		
-		else{
-    		//Result matrix stores the updated matrix of result from the executed swap rows function with matrix,row1, and row2 passed in arguments, to swap the row valus
-    		result_matrix = swap_rows(matrix,row1-1,row2-1);
-    		//Result matrix object executes the print grid function
-    		result_matrix.print_grid();
-    		//Break statement to get out of switch case statement
-    		break;
-		}
-	}
-	//If choice case is integer 6, Choice 6 is executed for a given matrix to swap column values, and be printed to terminal
-	case 6:
-	{
-		//Prints ouput to terminal for the user to be prompted the Matrix Numbers Text File name
-		cout<<"Enter Single nxn Matrix Numbers Text File Name: ";
-		//Stores the user input into matrix numbers text file name
-		cin >> matrix_numbers_text_file_name;
-		//matrix stores result ouput of the executed function called create matrice with matrix numbers text filename passed in as argument
-		matrix = create_matrice(matrix_numbers_text_file_name);
-		//Declares integer column1
-		int column1;
-		//Declares integer column2
-		int column2;
-		//Prints ouput to terminal to prompt the user for a Column 1 number to Swap
-		cout<<"Enter Column 1 to Swap";
-		//Stores user input in column1
-		cin >> column1;
-		//Prints ouput to terminal to prompt the user for a Column 2 number to Swap
-		cout<<"Enter Column 2 to Swap";
-		//Stores user input in column2
-		cin >> column2;
-		//If column1 and column2 are out of bound of the number of columns
-		if(column1-1 < 0 || column1-1 > matrix.get_number_of_columns() || column2-1 < 0 || column2-1 > matrix.get_number_of_columns() ){
-			//Prints to termianl that the column is out of bounds
-			cout<<"Column number is out of bounds"<<"\n";
-			//Breaks out of switch statement
-			break;
-		}
-		else{
-			//Result matrix stores the updated matrix of result from the executed swap columns function with matrix,column1, and column2 passed in arguments, to swap the column valus
-			result_matrix = swap_columns(matrix,column1-1,column2-1);
-			//Result matrix object executes the print grid function
-			result_matrix.print_grid();
-			//Break statement to get out of switch case statement
-			break;
-		}
-	}
-	//If choice case is integer 7, Choice 7 is executed for a given matrix to be given a updated value at the row by column location
-	case 7:
-	{
-		//Prints ouput to terminal for the user to be prompted the Matrix Numbers Text File name
-		cout<<"Enter Single nxn Matrix Numbers Text File Name: ";
-		//Stores the user input into matrix numbers text file name
-		cin >> matrix_numbers_text_file_name;
-		//matrix stores result ouput of the executed function called create matrice with matrix numbers text filename passed in as argument
-		matrix = create_matrice(matrix_numbers_text_file_name);
-		//Declares integer column
-		int column1;
-		//Declares integer row
-		int row1;
-		//Declares integer value
-		int value;
-		//Prints ouput to terminal to prompt the user for a row number
-		cout<<"Enter Row Number: ";
-		//Stores user input into row
-		cin>>row1;
-		//Prints ouput to terminal to prompt the user for a column number
-		cout<<"Enter Column Number: ";
-		//Stores user input into column
-		cin>>column1;
-		//Prints ouput to terminal to prompt the user for a value to be stored in the matrix at location row by column
-		cout<<"Enter Value to be stores: ";
-		//Stores the user input into value
-		cin>>value;
-
-		//Checks to see if the column is out of bounds
-		if(column1-1 < 0 || column1-1 > matrix.get_number_of_columns() ){
-			//Prints to the terminal that the column number is out of bounds
-			cout<<"Column number is out of bounds" << "\n";
-			//Breaks out of swicth statement
-			break;
-		}
-		//Checks to see if the row is out of bounds
-		if(row1-1 < 0 || row1-1 > matrix.get_number_of_rows() ){
-			//Prints to the terminal that the column number is out of bounds
-			cout<<"Row number is out of bounds" << "\n";
-			//Breaks out of swicth statement
-			break;
-		}
-		else{
-			//Result matrix stores the updated matrix result from the update matrix function with matrix,row,column, and value input. The matrix is updated with the value stored in the grid at row by cloumn location
-			result_matrix = update_matrix(matrix,row1-1,column1-1,value);
-			//Result matrix object executes the print grid function
-			result_matrix.print_grid();
-			//Break statement to get out of switch case statement
-			break;
-		}
-	}
-	//In case if all cases fail, default case is executed
-	default:
-	{
-		//Prints output to terminal that there choice is invalid
-		cout<<"Invalid Choice" << "\n";
-	}
-
+    string matrix_text_file;
+    cout<<"Enter Matrix Text File";
+    cin >> matrix_text_file;
+    
+	pair<Matrix<int>,Matrix<int>> matrices = create_matrices(matrix_text_file);
 	
 }
 
 
 int main(){
     cout<<"Hello! Welcome to the Matrix Function and Operations Program!"<<"\n";
-    print_menu();
     cout<<"\n";
     choice_selection();
     cout<<"Program Has Ended! Goodbye!"<<"\n";
