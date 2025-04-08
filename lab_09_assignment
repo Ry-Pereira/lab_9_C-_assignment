@@ -38,6 +38,7 @@ template <typename T> class Matrix{
 
 		Matrix<T> operator+(Matrix<T>&other);
 		Matrix<T> operator*(Matrix<T>&other);
+		
 };
 
 
@@ -118,8 +119,7 @@ template<typename T>void Matrix<T>::sum_diagonal(){
 	cout<<"Matrix Secondary Diagonal Sum"<< matrix_result_secondary_sum << "\n";
 }
 
-template <typename T>
-pair<Matrix<T>,Matrix<T>>create_matrices(string& matrix_text_file){
+template <typename T>pair<Matrix<T>,Matrix<T>>create_matrices(string& matrix_text_file){
     //Declares string line to hol line of file
 	string line;
 	//Declares and initializes integer line number to 1 to keep track of the number of line there are
@@ -130,6 +130,7 @@ pair<Matrix<T>,Matrix<T>>create_matrices(string& matrix_text_file){
 	int current_matrix_2_row = 0;
 	//Declares integer size of matrix to hold matrix size
 	int size_of_matrix;
+	int type_flag;
 	//Matrix object matrix 1 is declared and initialized with with a 0,0 pair passed in to indicate the vector grid is 0,0 in size
 	Matrix<T> matrix1(0,0);
 	//Matrix object matrix 2 is declared and initialized with with a 0,0 pair passed in to indicate the vector grid is 0,0 in size
@@ -153,14 +154,26 @@ pair<Matrix<T>,Matrix<T>>create_matrices(string& matrix_text_file){
 				std::stringstream ss(line);
 				//Extracts the matrix size form the stirng stream object for storing in size of matrix
 				ss >> size_of_matrix;
+				cout<<"Size of Matrix: "<<size_of_matrix<<"\n";
+				ss >> type_flag;
+				cout<<"Type: "<<type_flag<<"\n";
 				//Declares and initializes rows to size of matrix
 				int rows = size_of_matrix;
 				//Declares and initializes columns to size of matrix
 				int columns = size_of_matrix;
-				//Declares and initializes matrix1 to Matrix object with rows and columns passed in
-				matrix1 = Matrix<T>(rows,columns);
+				if(type_flag == 0){
+				    //Declares and initializes matrix1 to Matrix object with rows and columns passed in
+				matrix1 = Matrix<int>(rows,columns);
 				//Declares and initializes matrix2 to Matrix object with rows and columns passed in
-				matrix2 = Matrix<T>(rows,columns);
+				matrix2 = Matrix<int>(rows,columns);
+				}
+				else{
+				   //Declares and initializes matrix1 to Matrix object with rows and columns passed in
+				matrix1 = Matrix<double>(rows,columns);
+				//Declares and initializes matrix2 to Matrix object with rows and columns passed in
+				matrix2 = Matrix<double>(rows,columns);
+				}
+				
 			}
 			//If the line number is not 1, then the rest of the lines are Matrix numbers to be stored
 			else {
@@ -176,10 +189,14 @@ pair<Matrix<T>,Matrix<T>>create_matrices(string& matrix_text_file){
 						for(int column = 0; column<size_of_matrix; column++) {
 							//Gets the cell element until hitting a empty space and stores it in cell element
 							std::getline(ss,cell_element,' ');
-							//Declares and initializes cell element convert to integer
-							int value = stoi(cell_element);
-							//matrix 1 object executes the store value function with current row and colum with value passed in to store that value in the row by colum ni grid of matrix1
-							matrix1.store_cell_value(current_row,column,value);
+							if(type_flag == 0){
+							   int value = stoi(cell_element);
+							   matrix1.store_cell_value(current_row,column,value);
+							}
+							else{
+							  double value = stod(cell_element); 
+							  matrix1.store_cell_value(current_row,column,value);
+							}
 						}
 						//If the current row is equal to size of matrix, the next matrix is to be stored with the other elements
 						if(current_row == size_of_matrix) {
@@ -193,10 +210,15 @@ pair<Matrix<T>,Matrix<T>>create_matrices(string& matrix_text_file){
 						for(int column = 0; column<size_of_matrix; column++) {
 							////Gets the cell element until hitting a empty space and stores it in cell element
 							std::getline(ss,cell_element,' ');
-							//Declares and initializes cell element convert to integer
-							int value = stoi(cell_element);
-							//matrix 2 object executes the store value function with current matrix 2 row and colum with value passed in to store that value in the row by colum ni grid of matrix2
-							matrix2.store_cell_value(current_matrix_2_row ,column,value);
+							if(type_flag == 0){
+							    int value = stoi(cell_element);
+							    matrix2.store_cell_value(current_matrix_2_row ,column,value);
+							    
+							}
+							else{
+							    double value = stod(cell_element);
+							    matrix2.store_cell_value(current_matrix_2_row ,column,value);
+							}
 						}
 						//current matrix 2 row is incremented
 						current_matrix_2_row ++;
@@ -322,24 +344,50 @@ template <typename T>Matrix<T>  update_matrix(Matrix<T> matrix,int row,int colum
 
 
 
+template <typename T>
 void choice_selection() {
-    string matrix_text_file;
-    cout<<"Enter Matrix Text File";
-    cin >> matrix_text_file;
-    
-	pair<Matrix<int>,Matrix<int>> matrices = create_matrices<int>(matrix_text_file);
-	Matrix<int> matrix_1= matrices.first;
-	Matrix<int> matrix_2= matrices.second;
-	matrix_1.print_grid();
-	matrix_2.print_grid();
+	//pair<Matrix<T>,Matrix<T>> matrices = create_matrices<T>(matrix_text_file);
+//	Matrix<T> matrix_1= matrices.first;
+//	Matrix<T> matrix_2= matrices.second;
+//	matrix_1.print_grid();
+//	matrix_2.print_grid();
 	
 }
 
 
+
+
+
 int main(){
     cout<<"Hello! Welcome to the Matrix Function and Operations Program!"<<"\n";
+    string matrix_text_file;
+    cout<<"Enter Matrix _text file";
+    cin>>matrix_text_file;
+    ifstream file(matrix_text_file);
+    string first_line;
+    string matrix_size;
+    string type;
+    string line;
+    int line_count = 0;
+    while(getline(file,line)){
+        line_count++;
+    }
+    file.clear();
+    file.seekg(0);
+    if(getline(file,first_line)){
+        std::stringstream ss(first_line);
+        ss>>matrix_size;
+        ss>>type;
+        cout<<type<<"\n";
+        
+    
+    }
+    file.close();
+    cout<<line_count<<"\n";
+    
+    
     cout<<"\n";
-    choice_selection();
+    
     cout<<"Program Has Ended! Goodbye!"<<"\n";
     return 0;
 }
