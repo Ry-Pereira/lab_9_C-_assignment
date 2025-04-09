@@ -516,36 +516,53 @@ void choice_selection(string matrix_text_file) {
 
 
 
-
+//The main function of the program, the main entry point into the program
 int main(){
+    //Prints to termianl, the output to welcome the user to the program
     cout<<"Hello! Welcome to the Matrix Function and Operations Program!"<<"\n";
+    //Declares string matrix text file
     string matrix_text_file;
-    cout<<"Enter Matrix _text file";
+    //Prints to terminal, to prompt the user to enter matrix file
+    cout<<"Enter Matrix Text file: ";
+    //Stores the user input in the matrix text file
     cin>>matrix_text_file;
     
+    //Opens the specific file from the user with the ifstream
     ifstream file(matrix_text_file);
+    //Declares string first line to hold the first line of the program
     string first_line;
+    //Declares string matrix size to hold the size of the matrix
     string matrix_size;
-    string type;
-    
+    //Declares string value type to hold the value type of the matrix
+    string value_type;
+    //Declares string line to hold the line of the file
     string line;
+    //Integer line count is set to 0
     int line_count = 0;
     
+    //Loops through each line in the file until there are no more line
     while(getline(file,line)){
+        //Line count is incremeneted
         line_count++;
     }
+    //Resets the file to the beginning
     file.clear();
     file.seekg(0);
     
+    //Opens the file to first line of it
     if(getline(file,first_line)){
+        //Creates a stringstream object of the first line
         std::stringstream ss(first_line);
+        //Assigns the stringstream object to matrix size
         ss>>matrix_size;
+        //Integer size of matrix is ht ematrix size being converted to integer
         int size_of_matrix = stoi(matrix_size);
-        ss>>type;
-        cout<<type<<"\n";
+        //Takes another stringstream object to store in value type to determine if it is integer or double.
+        ss>>value_type;
+        
     }
     file.close();
-    cout<<line_count<<"\n";
+    
     
     if(type == "0"){
         choice_selection<int>(matrix_text_file);
@@ -554,12 +571,13 @@ int main(){
         choice_selection<double>(matrix_text_file);
     }
     else{
+        //If the ty
         cout<<"Invald"<<"\n";
     }
-    
-    
+    //Provides some newline spacing in the terminal
     cout<<"\n";
-    
+    //Prints to terminal that the program has ended
     cout<<"Program Has Ended! Goodbye!"<<"\n";
+    //Returns 0 to indicate the program ran smoothly
     return 0;
 }
