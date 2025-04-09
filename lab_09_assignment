@@ -39,8 +39,8 @@ template <typename T> class Matrix{
 		void store_cell_value(int row, int column, T value);
 		
 		void print_grid();
-		void add_matrices(Matrix<T>& other);
-		void multiply_matrices(Matrix<T>& other);
+		Matrix<T> add_matrices(Matrix<T>& other);
+		Matrix<T> multiply_matrices(Matrix<T>& other);
 		void sum_diagonal();
 		
 		virtual Matrix<T> swap_rows(int row1, int row2);
@@ -113,11 +113,17 @@ Matrix<T> Matrix<T>::operator+(Matrix<T>& other){
 }
 
 template<typename T>
+Matrix<T> Matrix<T>::add_matrices(Matrix<T>& other){
+    return *this + other;
+    
+}
+
+template<typename T>
 Matrix<T> Matrix<T>::operator*(Matrix<T>& other){
     Matrix<T> result(this->get_number_of_rows(),this->get_number_of_columns());
     
     for(int row = 0; row< this->get_number_of_rows();row++){
-        for(int column = 0; column < this>get_number_of_columns();column++){
+        for(int column = 0; column < this->get_number_of_columns();column++){
             T value = 0;
             for(int column_2 = 0;column_2 <this->get_number_of_columns();column_2++){
                 value += this->get_cell_value(row,column_2) * other.get_cell_value(column_2,column);
@@ -128,9 +134,13 @@ Matrix<T> Matrix<T>::operator*(Matrix<T>& other){
     }
     return result;
 }
-
 template <typename T>
-Matrix<T> Matrix<T>::sum_diagonal(Matrix<T> matrix){
+Matrix<T> Matrix<T>::multiply_matrices(Matrix<T>& other){
+    return *this * other;
+    
+}
+
+template <typename T> void sum_diagonal(Matrix<T> matrix){
 	//Declare and initializes column number to 0
 	int column_number = 0;
 	//Declares and initializes matrix 1 result main sum to 0
@@ -287,6 +297,8 @@ class DoubleMatrix:public Matrix<double>{
 template <typename T>
 Matrix<T>Matrix<T>::swap_rows(int row_num_1,int row_num_2) {
 	//Matrix result matrix object is set to the matrix 1 object
+	row_num_1--;
+	row_num_2--;
 	Matrix<T> result_matrix = *this;
 
 
@@ -408,7 +420,7 @@ void choice_selection(string matrix_text_file) {
 	matrix_1.print_grid();
 	matrix_2.print_grid();
 	cout<<"\n";
-	matrix_1 = matrix_1 + (matrix_2);
+	matrix_1 = matrix_1.add_matrices(matrix_2);
 	
 	
 	
