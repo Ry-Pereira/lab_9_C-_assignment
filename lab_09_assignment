@@ -1,3 +1,16 @@
+//Program Name: Problem 9: Matrix Function and Operations Program
+//Brief Description: This program will ask the user for a matrix text file and options choice for adding or multiplying matrices, finding the sum diagonal, swapping rows and columsn,a dn updating the matrix at row by cloumn locaiton wiht either integer or double precision values and using tempalte and polymorphism function.
+//Input: The input will be a matrix text file contains a 2 nxn matrix, witht the first line indicating the size of the n x n matrix with a type value flag to indicate what type values are the matrix values in the matrix text file
+//Ouput: The ouput will welcome the user and give a goodbye message to the user. Print result matrices based on what functions used and what type of matrix to deal with.
+//All collaborators: None
+//Other Sources:Github Copilot and ChatGPT 
+//Author: Ryan Antony Pereira
+//Creation Date: 4/7/2025
+//Last Modified Date: 4/8/2025
+
+
+
+
 
 //Includes the iostream library file to include standard input and ouput for cin and cout
 #include <iostream>
@@ -561,17 +574,22 @@ int main(){
         ss>>value_type;
         
     }
+    //Close the file as it done to read
     file.close();
     
-    
-    if(type == "0"){
+    //If the type is set to "0"
+    if(value_type == "0"){
+        //It is an integer so the choice selection will deal with a integer matrix text file
         choice_selection<int>(matrix_text_file);
     }
-    else if(type == "1"){
+    //If the type is set to "1"
+    else if(value_type == "1"){
+        //It is an double so the choice selection will deal with a double matrix text file
         choice_selection<double>(matrix_text_file);
     }
+    //If no value type is satisfied then its invalid 
     else{
-        //If the ty
+        //Prints to terminal ouput that the value type is invalid
         cout<<"Invald"<<"\n";
     }
     //Provides some newline spacing in the terminal
