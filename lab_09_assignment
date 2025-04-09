@@ -99,7 +99,38 @@ template <typename T> void Matrix<T>::print_grid(){
     }
 }
 
-template <typename T>Matrix<T> sum_diagonal(Matrix<T> matrix){
+template<typename T>
+Matrix<T> Matrix<T>::operator+(Matrix<T>& other){
+    Matrix<T> result(this->get_number_of_rows(),this->get_number_of_columns());
+    
+    for(int row = 0; row< this->get_number_of_rows();row++){
+        for(int column = 0; column < this->get_number_of_columns();column++){
+            T value = this->get_cell_value(row,column) + other.get_cell_value(row,column);
+            result.store_cell_value(row,column,value);
+        }
+    }
+    return result;
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::operator*(Matrix<T>& other){
+    Matrix<T> result(this->get_number_of_rows(),this->get_number_of_columns());
+    
+    for(int row = 0; row< this->get_number_of_rows();row++){
+        for(int column = 0; column < this>get_number_of_columns();column++){
+            T value = 0;
+            for(int column_2 = 0;column_2 <this->get_number_of_columns();column_2++){
+                value += this->get_cell_value(row,column_2) * other.get_cell_value(column_2,column);
+                
+            }
+            result.store_cell_value(row,column,value);
+        }
+    }
+    return result;
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::sum_diagonal(Matrix<T> matrix){
 	//Declare and initializes column number to 0
 	int column_number = 0;
 	//Declares and initializes matrix 1 result main sum to 0
@@ -377,7 +408,10 @@ void choice_selection(string matrix_text_file) {
 	matrix_1.print_grid();
 	matrix_2.print_grid();
 	cout<<"\n";
-	matrix_1 = matrix_1.swap_columns(1,2);
+	matrix_1 = matrix_1 + (matrix_2);
+	
+	
+	
 	
 	cout<<"Result"<<"\n\n";
 	matrix_1.print_grid();

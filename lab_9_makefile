@@ -1,0 +1,16 @@
+CC =g++
+CFLAGS = -c -Wall
+
+all: prog
+
+prog: lab_09_assignment.o
+	$(CC) -o prog lab_09_assignment.o
+
+
+
+lab_08_assignment.o:lab_09_assignment.cpp
+	$(CC) $(CFLAGS) lab_09_assignment.cpp
+
+
+clean:
+	rm -f prog *.o
