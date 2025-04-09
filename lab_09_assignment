@@ -570,9 +570,15 @@ void choice_selection(string matrix_text_file) {
 
 	Matrix<T> result_matrix_1 = matrix_1;
 	Matrix<T> result_matrix_2 = matrix_2;
-	Matrix<T> result_matrix_3 = matrix_3;
-	Matrix<T> result_matrix_4 = matrix_4;
+	Matrix<T> result_matrix_3 = matrix_1;
+	Matrix<T> result_matrix_4 = matrix_2;
+	Matrix<T> result_matrix_5 = matrix_1;
 	
+	Matrix<T> default_matrix_1 = matrix_1;
+	Matrix<T> default_matrix_2 = matrix_2;
+	Matrix<T> default_matrix_3 = matrix_1;
+	Matrix<T> default_matrix_4 = matrix_2;
+	Matrix<T> default_matrix_5 = matrix_1;
 
 
     
@@ -589,23 +595,37 @@ void choice_selection(string matrix_text_file) {
 	
 	cout<<"Row Swap  Result"<<"\n";
 	int row_1;
-	int row_2
+	int row_2;
 	cout<<"Row 1: "<<"\n";
-	cin>>row_1
+	cin>>row_1;
 	cout<<"Row 2: "<<"\n";
-	cin>>row_2
+	cin>>row_2;
+	default_matrix_3.swap_rows(row_1,row_2);
+	default_matrix_3.print_grid();
 	
 	cout<<"Column Swap  Result"<<"\n";
 	int col_1;
-	int col_2
+	int col_2;
 	cout<<"Col 1: "<<"\n";
-	cin>>col_1
+	cin>>col_1;
 	cout<<"Col 2: "<<"\n";
-	cin>>col_2
+	cin>>col_2;
+	default_matrix_4.swap_columns(row_1,row_2);
+	default_matrix_4.print_grid();
 	
 	
 
-
+    cout<<"Update Matrix result"<<"\n";
+    int row;
+    int column;
+    T value;
+    cout<<"COlumn: ";
+    cin>>column;
+    cout<<"Row";
+    cin>>row;
+    cout<<"Value";
+    cin>>value;
+    default_matrix_5.update_matrix(default_matrix_5,row,column,value);
 	
 	
 	
