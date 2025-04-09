@@ -9,74 +9,111 @@
 #include <sstream>
 //Includes the C++ vector library for array manipulation and implementation
 #include <vector>
-#include <type_traits>
+
 //Using standard namespace to avoid using std:: prefix
 using namespace std;
-// Template function to convert a string to a specified type (T)
 
 
+
+//Used ChatGPT for suggestions on using stringtoType functions in order to convert string values to either integers or double precision point values
+
+//Template function that accepts any type T value
 template <typename T>
+//The string return a type T of when converting a string to the desired type
 T stringToType(const string& str) {
-    stringstream ss(str);
+    //Stringstream object initialized with the input string passed in as argument
+    stringstream string_to_type_object(str);
+    //Declare T result to hold the conversion of the string value into the T type value
     T result;
-    ss >> result; // Convert the string to the specified type
+    //Extracts the stringstream object and stores in the result 
+    string_to_type_object >> result; 
+    //Returns the T type result as it now converted from a string
     return result;
 }
 
+//Defines as template class named Matrix that can work with anyt T type value passed in 
 template <typename T> class Matrix{
+    //The private section of the class to hid implementation process
     private:
+        //Declared integer number of rows to store the number of rows in a matrix
         int number_of_rows;
+        //Declared integer number of columns to store the number of columns in a matrix
         int number_of_columns;
+        //Declared a empty 2D vector grid to implement a physical matrix to store and retrieve Matrix data
         vector<vector<T>> grid;
+        
+    //The public section of the class that is accessible outside of the class
     public:
+        //Constructore that initializes the matrix with specifc integer of rows and columns to be passed in
 		Matrix(int rows, int columns);
-		
+		//Getter function that returns the integer number of rows in the matrix is declared
 		int get_number_of_rows();
+		//Getter function that returns the integer number of columns in the matrix is declared
 		int get_number_of_columns();
+		//Getter function that returns the T type cell value located in the matrix vector grid at location integer row and column that is passed in, is declared
 		T get_cell_value(int row, int column);
 
-
+        //Function to store a T cell value in the matrix vector grid at the row and column location passed in, along with T value argument passed in, is declared
 		void store_cell_value(int row, int column, T value);
-		
+		//Function to print the vector grid of the matrix row by row, column by column, spaced out and formatted is declared
 		void print_grid();
+		//Function that add two matrices together with with the other matrix passed in as argument, and returned with a result matrix of that addittion, is declared
 		Matrix<T> add_matrices(Matrix<T>& other);
+		//Function that multiply two matrices together with with the other matrix passed in as argument, and returned with a result matrix of that multiplication, is declared
 		Matrix<T> multiply_matrices(Matrix<T>& other);
+		//Function to sum all the diagonal elements, the main and secondary elements, and print the sums, is declared
 		void sum_diagonal();
-		
+		//Virtual function two swap two rows in a matrix with row1 and row 2 passed in as argument, is declared
 		virtual Matrix<T> swap_rows(int row1, int row2);
+		//Virtual function two swap two columns in a matrix with column1 and column 2 passed in as argument, is declared
 		virtual Matrix<T> swap_columns(int column1, int column2);
+		//Virtual function to update a matrix with matrix passed in, and intger row and column location wit a T type value passed in to update with, is declared
 		virtual Matrix<T> update_matrix(Matrix<T>& matrix,int row, int column, T value);
-
+        
+        //Overload operator + to allow matrix addition
 		Matrix<T> operator+(Matrix<T>&other);
+		//Overload operator + to allow matrix multiplication
 		Matrix<T> operator*(Matrix<T>&other);
 		
 };
 
 
-
+//Template constructor for the Matrix class, with Type T as parameter with integer rows and columns to set the size of the matrix
 template <typename T> Matrix<T>::Matrix(int rows, int columns){
+    //Sets the number of rows to the rows argument
     number_of_rows = rows;
+    //Sets the number of columns to the columns argument
     number_of_columns = columns;
+    //Resizes the grid to have rows and columns to resize it, and each value is assigned T type 
     grid.resize(rows, vector<T>(columns));
 }
 
+//Template function to return the number of rows in the matrix
 template <typename T> int Matrix<T>::get_number_of_rows(){
+    //Return the number of rows in the matrix
     return number_of_rows;
 }
 
+//Template function to return the number of columns in the matrix
 template <typename T> int Matrix<T>::get_number_of_columns(){
+    //Return the number of columns in the matrix
     return number_of_columns;
 }
-
+//Template function to return the cell value of the matrix located at the row and columns location by the integer row and column argument
 template <typename T> T Matrix<T>::get_cell_value(int row, int column){
+    //Returns thevalue at the grid at location row by column from the argument
     return grid[row][column];
 }
 
+//Template function to store the cell value of the matrix located at the row and columns location by the integer row and column argument with a T type value in that place
 template <typename T> void Matrix<T>::store_cell_value(int row, int column, T value){
+    //At the matrix grid by the row by column location sets the value to the T type value argument.
     grid[row][column] = value;
 }
 
+//Template function to print the grid of the matrix, row by row,column by column, for all values located
 template <typename T> void Matrix<T>::print_grid(){
+    //To terminal output the column
     cout<< "Column ";
     //For in loop to iterate through eaach column and print a number to indicate position of cell
     for(int column = 1; column < number_of_columns+1; column++){
@@ -99,43 +136,65 @@ template <typename T> void Matrix<T>::print_grid(){
     }
 }
 
+//Template Matrix class function that adds two matrixes, where T is the type value for the elements,w ith operation overloading
 template<typename T>
+//Function that adds two matrices and returns the result of that
 Matrix<T> Matrix<T>::operator+(Matrix<T>& other){
+    //Result matrix is set witht eh same number of rows and colums of the matrix object evoking it
     Matrix<T> result(this->get_number_of_rows(),this->get_number_of_columns());
-    
+    //For in loop through each rows in the matrix class object
     for(int row = 0; row< this->get_number_of_rows();row++){
+        //For in loop through each column in the matrix class object
         for(int column = 0; column < this->get_number_of_columns();column++){
+            //T type value is set to the addtion product of matrix getting the cell value at the wor and column location and the other matrix at the cell value at the row by column location
             T value = this->get_cell_value(row,column) + other.get_cell_value(row,column);
+            //Result stores the cell valuuw with row,column, and value passed in
             result.store_cell_value(row,column,value);
         }
     }
+    //Returns the result matrix of that product
     return result;
 }
 
+//Template class matrix function that adds matrices together
 template<typename T>
+//Function that returns the result of adding two matrices
 Matrix<T> Matrix<T>::add_matrices(Matrix<T>& other){
+    //Returns the this matrix and the other matrix added together
     return *this + other;
     
 }
 
+//Template Matrix class function that multiplies two matrixes, where T is the type value for the elements,w ith operation overloading
 template<typename T>
+//Function that multiplies two matrices and returns the result of that
 Matrix<T> Matrix<T>::operator*(Matrix<T>& other){
+    //Result matrix is set witht eh same number of rows and colums of the matrix object evoking it
     Matrix<T> result(this->get_number_of_rows(),this->get_number_of_columns());
-    
+    //For in loop through each row in the matric class object evoking it
     for(int row = 0; row< this->get_number_of_rows();row++){
+        //For in loop through each column in the matric class object evoking it
         for(int column = 0; column < this->get_number_of_columns();column++){
+            //T type value is set to 0
             T value = 0;
+            //For in loop through each column in the class matrix object evoking it
             for(int column_2 = 0;column_2 <this->get_number_of_columns();column_2++){
+                //Value increments the multiplication porduct of the matrix getting the cell valye at row by column2 and other amtrix getting the cellv alue at column2 by column
                 value += this->get_cell_value(row,column_2) * other.get_cell_value(column_2,column);
-                
             }
+            //Result matrix stores the cell value with row,column,value argument
             result.store_cell_value(row,column,value);
         }
     }
+    //Returns the resutl matrix object
     return result;
 }
+
+//Template class matrix function that multiplies matrices together
 template <typename T>
+//Function that returns the result of multiplying two matrices
 Matrix<T> Matrix<T>::multiply_matrices(Matrix<T>& other){
+    //Returns the this matrix and the other matrix multiplied together
     return *this * other;
     
 }
@@ -143,9 +202,9 @@ Matrix<T> Matrix<T>::multiply_matrices(Matrix<T>& other){
 template <typename T> void sum_diagonal(Matrix<T> matrix){
 	//Declare and initializes column number to 0
 	int column_number = 0;
-	//Declares and initializes matrix 1 result main sum to 0
+	//Declares and initializes T type matrix 1 result main sum to 0
 	T matrix_result_main_sum = 0;
-	//Declares and initializes matrix 1 result secondary sum to 0
+	//Declares and initializes T type matrix 1 result secondary sum to 0
 	T matrix_result_secondary_sum = 0;
 
 	//For in loop to iterate through each row n matrix 1 number of rows
@@ -183,6 +242,7 @@ template <typename T>pair<Matrix<T>,Matrix<T>>create_matrices(string& matrix_tex
 	int current_matrix_2_row = 0;
 	//Declares integer size of matrix to hold matrix size
 	int size_of_matrix;
+	//Declares the integer type flag
 	int type_flag;
 	//Matrix object matrix 1 is declared and initialized with with a 0,0 pair passed in to indicate the vector grid is 0,0 in size
 	Matrix<T> matrix1(0,0);
@@ -234,6 +294,7 @@ template <typename T>pair<Matrix<T>,Matrix<T>>create_matrices(string& matrix_tex
 						for(int column = 0; column<size_of_matrix; column++) {
 							//Gets the cell element until hitting a empty space and stores it in cell element
 							std::getline(ss,cell_element,' ');
+							//T type value stores the cell element that was string then converted to T type
 							T value = stringToType<T>(cell_element);
 							matrix1.store_cell_value(current_row,column,value);
 							
@@ -250,6 +311,7 @@ template <typename T>pair<Matrix<T>,Matrix<T>>create_matrices(string& matrix_tex
 						for(int column = 0; column<size_of_matrix; column++) {
 							////Gets the cell element until hitting a empty space and stores it in cell element
 							std::getline(ss,cell_element,' ');
+							//T type value stores the cell element that was string then converted to T type
 							T value = stringToType<T>(cell_element);
 							matrix2.store_cell_value(current_matrix_2_row ,column,value);
 							
@@ -271,34 +333,51 @@ template <typename T>pair<Matrix<T>,Matrix<T>>create_matrices(string& matrix_tex
 	return {matrix1,matrix2};
 }
 
+//Definition of IntegerMatrix class, inheriting from Matrix
 class IntegerMatrix:public Matrix<int>{
+    //Public section of the class where accessible outside of the class
     public:
+        //Constructore for IntegerMatrix class object with integer row and columns passed in as argument
         IntegerMatrix(int rows, int columns):Matrix<int>(rows,columns){}
         
+        //Overrides the swap rows method to swap the rows in the IntegerMatrix
         Matrix<int> swap_rows(int row_num_1,int row_num_2) override {
+            //Returns Matrix<int> with the rows swapped
             return Matrix<int>::swap_rows(row_num_1,row_num_2);
         }
+        //Overrides the swap columns method to swap the rows in the IntegerMatrix
         Matrix<int> swap_columns(int column_num_1,int column_num_2) override {
+            //Returns Matrix<int> with the columns swapped
             return Matrix<int>::swap_columns(column_num_1,column_num_2);
         }
 };
+
+//Definition of IntegerMatrix class, inheriting from Matrix
 class DoubleMatrix:public Matrix<double>{
+    //Public section of the class where accessible outside of the class
     public:
+     //Constructore for DoubleMatrix class object with integer row and columns passed in as argument
         DoubleMatrix(int rows, int columns):Matrix<double>(rows,columns){}
         
+        //Overrides the swap rows method to swap the rows in the DoubleMatrix
         Matrix<double> swap_rows(int row_num_1,int row_num_2) override {
+            //Returns Matrix<double> with the rows swapped
             return Matrix<double>::swap_rows(row_num_1,row_num_2);
         }
+        //Overrides the swap columns method to swap the columns  in the DoubleMatrix
         Matrix<double> swap_columns(int column_num_1,int column_num_2) override {
+            //Returns Matrix<double> with the columnss swapped
             return Matrix<double>::swap_columns(column_num_1,column_num_2);
         }
 };
 //Function that return a matrix with its rows swapped, takes in a matrix object, integer row num 1 and 2 as input
 template <typename T>
 Matrix<T>Matrix<T>::swap_rows(int row_num_1,int row_num_2) {
-	//Matrix result matrix object is set to the matrix 1 object
+	//row num 1 is decremented
 	row_num_1--;
+	//row num 2 is decremented
 	row_num_2--;
+	//result matrix stores the matrix with teh *this pointer
 	Matrix<T> result_matrix = *this;
 
 
@@ -350,9 +429,11 @@ Matrix<T>Matrix<T>::swap_rows(int row_num_1,int row_num_2) {
 //Function that return a matrix with its rows swapped, takes in a matrix object, integer column num 1 and 2 as input
 template <typename T>
 Matrix<T> Matrix<T>::swap_columns(int column_num_1,int column_num_2) {
-	//Matrix result matrix object is set to the matrix 1 object
+	//column num 1 is decremented
 	column_num_1--;
+	//Column num2 is decremented
 	column_num_2--;
+	//result matrix stores the matrix with teh *this pointer
 	Matrix<T> result_matrix = *this;
 
 	//If column num 1 is greater than matrix 1 number of columns, its out of bounds
