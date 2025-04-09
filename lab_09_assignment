@@ -562,19 +562,48 @@ void choice_selection(string matrix_text_file) {
 	
 	//Prints the matrix 1 and 2 to output termial display
 	matrix_1.print_grid();
+	cout<<"\n";
 	matrix_2.print_grid();
 	//Provides newline spacing in output terminal display
 	cout<<"\n";
 
 
-	default_matrix_1 = matrix_1;
-	default_matrix_2 = matrix_2;
+	Matrix<T> result_matrix_1 = matrix_1;
+	Matrix<T> result_matrix_2 = matrix_2;
+	Matrix<T> result_matrix_3 = matrix_3;
+	Matrix<T> result_matrix_4 = matrix_4;
+	
 
 
-	matrix_1 = matrix_1.add_matrices(matrix_2);
-	matrix_1 = matrix_1.multiply_matrices(matrix_2);
-
+    
+	default_matrix_2 = default_matrix_1.add_matrices(default_matrix_2);
+	cout<<"Addition Result"<<"\n";
+	default_matrix_2.print_grid();
+	
+	default_matrix_2 = matrix_1.multiply_matrices(matrix_2);
+	cout<<"multiplication Result"<<"\n";
+	default_matrix_2.print_grid();
+	
+	cout<<"Sum Diagonal Result"<<"\n";
 	sum_diagonal(matrix_1);
+	
+	cout<<"Row Swap  Result"<<"\n";
+	int row_1;
+	int row_2
+	cout<<"Row 1: "<<"\n";
+	cin>>row_1
+	cout<<"Row 2: "<<"\n";
+	cin>>row_2
+	
+	cout<<"Column Swap  Result"<<"\n";
+	int col_1;
+	int col_2
+	cout<<"Col 1: "<<"\n";
+	cin>>col_1
+	cout<<"Col 2: "<<"\n";
+	cin>>col_2
+	
+	
 
 
 	
