@@ -14,14 +14,14 @@
 using namespace std;
 // Template function to convert a string to a specified type (T)
 
-template <typename T> T stringToType(const string& string){
-    stringstream ss(string);
-    T result_value;
-    ss>> result_value;
-    return result;
-    
-}
 
+template <typename T>
+T stringToType(const string& str) {
+    stringstream ss(str);
+    T result;
+    ss >> result; // Convert the string to the specified type
+    return result;
+}
 
 template <typename T> class Matrix{
     private:
@@ -39,12 +39,13 @@ template <typename T> class Matrix{
 		void store_cell_value(int row, int column, T value);
 		
 		void print_grid();
-		void add_matrices(Matrix<T>&other);
-		void multiply_matrices(Matrix<T>&other);
+		void add_matrices(Matrix<T>& other);
+		void multiply_matrices(Matrix<T>& other);
 		void sum_diagonal();
-		Matrix<T> swap_rows(int row1, int row2);
-		Matrix<T> swap_columns(int column1, int column2);
-		Matrix<T> updated_matrix_cell(int row, int column, T value);
+		
+		virtual Matrix<T> swap_rows(int row1, int row2);
+		virtual Matrix<T> swap_columns(int column1, int column2);
+		virtual Matrix<T> update_matrix(Matrix<T>& matrix,int row, int column, T value);
 
 		Matrix<T> operator+(Matrix<T>&other);
 		Matrix<T> operator*(Matrix<T>&other);
@@ -229,19 +230,42 @@ template <typename T>pair<Matrix<T>,Matrix<T>>create_matrices(string& matrix_tex
 	return {matrix1,matrix2};
 }
 
-class IntegerMatrix: public Matrix{
-    void swap_rows(int col,int col2)ovveride{
-        //Matrix result matrix object is set to the matrix 1 object
-	Matrix<T> result_matrix = matrix_1;
+class IntegerMatrix:public Matrix<int>{
+    public:
+        IntegerMatrix(int rows, int columns):Matrix<int>(rows,columns){}
+        
+        Matrix<int> swap_rows(int row_num_1,int row_num_2) override {
+            return Matrix<int>::swap_rows(row_num_1,row_num_2);
+        }
+        Matrix<int> swap_columns(int column_num_1,int column_num_2) override {
+            return Matrix<int>::swap_columns(column_num_1,column_num_2);
+        }
+};
+class DoubleMatrix:public Matrix<double>{
+    public:
+        DoubleMatrix(int rows, int columns):Matrix<double>(rows,columns){}
+        
+        Matrix<double> swap_rows(int row_num_1,int row_num_2) override {
+            return Matrix<double>::swap_rows(row_num_1,row_num_2);
+        }
+        Matrix<double> swap_columns(int column_num_1,int column_num_2) override {
+            return Matrix<double>::swap_columns(column_num_1,column_num_2);
+        }
+};
+//Function that return a matrix with its rows swapped, takes in a matrix object, integer row num 1 and 2 as input
+template <typename T>
+Matrix<T>Matrix<T>::swap_rows(int row_num_1,int row_num_2) {
+	//Matrix result matrix object is set to the matrix 1 object
+	Matrix<T> result_matrix = *this;
 
 
 	//If row num 1 is greater than matrix 1 number of rows, it is out of bounds
-	if(row_num_1> matrix_1.get_number_of_rows()) {
+	if(row_num_1> this->get_number_of_rows()) {
 		//Returns result matrix object
 		return result_matrix;
 	}
 	//If row num 2 is greater than matrix 1 number of rows, it is out of bounds
-	else if(row_num_2> matrix_1.get_number_of_rows()) {
+	else if(row_num_2> this->get_number_of_rows()) {
 		//Returns result matrix object
 		return result_matrix;
 	}
@@ -258,37 +282,43 @@ class IntegerMatrix: public Matrix{
 	//If rows are in bounds, swapping can be done for the rows
 	else {
 		//For in loop to iterate through each column
-		for(int column = 0; column< matrix_1.get_number_of_columns(); column++) {
+		for(int column = 0; column< this->get_number_of_columns(); column++) {
 			//Declare and initialize value to the matrix1 at grid lcoation row num2 by column
-			int value = matrix_1.get_grid_value(row_num_2,column);
+			int value = this->get_cell_value(row_num_2,column);
 			//Result matrix stores the value at the row num1 location at column with the value to swap it
-			result_matrix.store_value(row_num_1,column,value);
+			result_matrix.store_cell_value(row_num_1,column,value);
 		}
 		//For in loop to iterate through each column
-		for(int column = 0; column< matrix_1.get_number_of_columns(); column++) {
+		for(int column = 0; column< this->get_number_of_columns(); column++) {
 			//Declare and initialize value to the matrix1 at grid lcoation row num1 by column
-			int value = matrix_1.get_grid_value(row_num_1,column);
+			int value = this->get_cell_value(row_num_1,column);
 			//Result matrix stores the value at the row num2 location at column with the value to swap it
-			result_matrix.store_value(row_num_2,column,value);
+			result_matrix.store_cell_value(row_num_2,column,value);
 		}
 		//Returns the result matrix object with rows swapped
 		return result_matrix;
 	}
-    void swap(rows){
-        //Function that return a matrix with its rows swapped, takes in a matrix object, integer column num 1 and 2 as input
-template <typename T>Matrix<T>  swap_columns(Matrix<T> matrix_1,int column_num_1,int column_num_2) {
+}
+
+
+
+//ChatGpt helped me with finnding how to swap columns 
+
+//Function that return a matrix with its rows swapped, takes in a matrix object, integer column num 1 and 2 as input
+template <typename T>
+Matrix<T> Matrix<T>::swap_columns(int column_num_1,int column_num_2) {
 	//Matrix result matrix object is set to the matrix 1 object
 	column_num_1--;
 	column_num_2--;
-	Matrix<T> result_matrix = matrix_1;
+	Matrix<T> result_matrix = *this;
 
 	//If column num 1 is greater than matrix 1 number of columns, its out of bounds
-	if(column_num_1> matrix_1.get_number_of_columns()) {
+	if(column_num_1> this->get_number_of_columns()) {
 		//Returns result matrix
 		return result_matrix;
 	}
 	//If column num 2 is greater than matrix 1 number of columns, its out of bounds
-	else if(column_num_2> matrix_1.get_number_of_columns()) {
+	else if(column_num_2> this->get_number_of_columns()) {
 		//Returns result matrix
 		return result_matrix;
 	}
@@ -305,16 +335,16 @@ template <typename T>Matrix<T>  swap_columns(Matrix<T> matrix_1,int column_num_1
 	//If column number are in bound, swapping of columns can happen
 	else {
 		//For in loop to iterate through each row
-		for(int row = 0; row< matrix_1.get_number_of_rows(); row++) {
+		for(int row = 0; row< this->get_number_of_rows(); row++) {
 			//Declare and initialize value to the matrix1 at grid lcoation row by column num2
-			T value = matrix_1.get_cell_value(row,column_num_2);
+			T value = this->get_cell_value(row,column_num_2);
 			//Result matrix stores the value at the row  location at column num 1 with the value to swap it
 			result_matrix.store_cell_value(row,column_num_1,value);
 		}
 		//For in loop to iterate through each row
-		for(int row = 0; row< matrix_1.get_number_of_rows(); row++) {
+		for(int row = 0; row< this->get_number_of_rows(); row++) {
 			//Declare and initialize value to the matrix1 at grid lcoation row  by column num 1
-			T value = matrix_1.get_cell_value(row,column_num_1);
+			T value = this->get_cell_value(row,column_num_1);
 			//Result matrix stores the value at the row  location at column num 2 with the value to swap it
 			result_matrix.store_cell_value(row,column_num_2,value);
 		}
@@ -322,29 +352,23 @@ template <typename T>Matrix<T>  swap_columns(Matrix<T> matrix_1,int column_num_1
 		return result_matrix;
 	}
 }
-    }
-}
-
-
-
-
-//ChatGpt helped me with finnding how to swap columns 
-
-
 
 //Function that returns a updated matrix object with integer row,column, and value passed in as argument to update matrix at row by column location with new value
-template <typename T>Matrix<T>  update_matrix(Matrix<T> matrix,int row,int column, T value) {
+template <typename T>
+Matrix<T>Matrix<T>::update_matrix(Matrix<T>& matrix,int row,int column, T value) {
+    Matrix<T> result_matrix = matrix;
 	//Matrix obejct executes the store value with row,column,value input passed in to store the value at that row by column location
-	matrix.store_cell_value(row,column,value);
+	result_matrix.store_cell_value(row,column,value);
 	//Returns matrix object
-	return matrix;
+	return result_matrix;
 }
 
 
 
 
 
-template <typename T> void choice_selection(string matrix_text_file) {
+template <typename T> 
+void choice_selection(string matrix_text_file) {
     cout << "In and out with type: " << typeid(T).name() << "\n";
 	pair<Matrix<T>,Matrix<T>> matrices = create_matrices<T>(matrix_text_file);
 	Matrix<T> matrix_1= matrices.first;
@@ -353,7 +377,7 @@ template <typename T> void choice_selection(string matrix_text_file) {
 	matrix_1.print_grid();
 	matrix_2.print_grid();
 	cout<<"\n";
-	matrix_1 = swap_columns(matrix_1,1,2);
+	matrix_1 = matrix_1.swap_columns(1,2);
 	
 	cout<<"Result"<<"\n\n";
 	matrix_1.print_grid();
