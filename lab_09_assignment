@@ -9,6 +9,8 @@
 //Last Modified Date: 4/8/2025
 
 
+//ChatGPT was use primarily with coding. I came across a lot of bugs and errors, it provided with suggestion to adjust my code and fix the errors.
+//Espically for template function and operation overloading, and polymorphism with the class matrix and derived classed was helped coded with assistena ce and reviewal of the code from ChatGPT
 
 
 
@@ -43,6 +45,9 @@ T stringToType(const string& str) {
     //Returns the T type result as it now converted from a string
     return result;
 }
+
+//Used ChatGPT for suggestions on creating the class matrix  with all function declared
+
 
 //Defines as template class named Matrix that can work with anyt T type value passed in 
 template <typename T> class Matrix{
@@ -91,6 +96,8 @@ template <typename T> class Matrix{
 };
 
 
+//Used ChatGPT for suggestions on creating the class matrix  with all function declared
+
 //Template constructor for the Matrix class, with Type T as parameter with integer rows and columns to set the size of the matrix
 template <typename T> Matrix<T>::Matrix(int rows, int columns){
     //Sets the number of rows to the rows argument
@@ -101,28 +108,42 @@ template <typename T> Matrix<T>::Matrix(int rows, int columns){
     grid.resize(rows, vector<T>(columns));
 }
 
+
+//Used ChatGPT for suggestions on creating the get number of rows function
+
 //Template function to return the number of rows in the matrix
 template <typename T> int Matrix<T>::get_number_of_rows(){
     //Return the number of rows in the matrix
     return number_of_rows;
 }
 
+//Used ChatGPT for suggestions on creating the get number of columnss function
+
 //Template function to return the number of columns in the matrix
 template <typename T> int Matrix<T>::get_number_of_columns(){
     //Return the number of columns in the matrix
     return number_of_columns;
 }
+
+
+//Used ChatGPT for suggestions on getting cell value
+
 //Template function to return the cell value of the matrix located at the row and columns location by the integer row and column argument
 template <typename T> T Matrix<T>::get_cell_value(int row, int column){
     //Returns thevalue at the grid at location row by column from the argument
     return grid[row][column];
 }
 
+//Used ChatGPT for suggestions on stroing cell value
+
 //Template function to store the cell value of the matrix located at the row and columns location by the integer row and column argument with a T type value in that place
 template <typename T> void Matrix<T>::store_cell_value(int row, int column, T value){
     //At the matrix grid by the row by column location sets the value to the T type value argument.
     grid[row][column] = value;
 }
+
+
+//Used ChatGPT for suggestions on printing the grid of the matrix
 
 //Template function to print the grid of the matrix, row by row,column by column, for all values located
 template <typename T> void Matrix<T>::print_grid(){
@@ -149,6 +170,9 @@ template <typename T> void Matrix<T>::print_grid(){
     }
 }
 
+
+//Used ChatGPT for suggestions on operation overloading, coveying and clarrifying my code similar to my other code in the last assignment
+
 //Template Matrix class function that adds two matrixes, where T is the type value for the elements,w ith operation overloading
 template<typename T>
 //Function that adds two matrices and returns the result of that
@@ -169,6 +193,8 @@ Matrix<T> Matrix<T>::operator+(Matrix<T>& other){
     return result;
 }
 
+//Used ChatGPT for suggestions on add matrices function
+
 //Template class matrix function that adds matrices together
 template<typename T>
 //Function that returns the result of adding two matrices
@@ -177,6 +203,9 @@ Matrix<T> Matrix<T>::add_matrices(Matrix<T>& other){
     return *this + other;
     
 }
+
+
+//Used ChatGPT for suggestions on operation overloading, coveying and clarrifying my code similar to my other code in the last assignment with the multiplying part
 
 //Template Matrix class function that multiplies two matrixes, where T is the type value for the elements,w ith operation overloading
 template<typename T>
@@ -203,6 +232,9 @@ Matrix<T> Matrix<T>::operator*(Matrix<T>& other){
     return result;
 }
 
+
+//Used ChatGPT for suggestions on multiplying matrices function
+
 //Template class matrix function that multiplies matrices together
 template <typename T>
 //Function that returns the result of multiplying two matrices
@@ -211,6 +243,9 @@ Matrix<T> Matrix<T>::multiply_matrices(Matrix<T>& other){
     return *this * other;
     
 }
+
+
+//Used ChatGPT for suggestions on sum diagnal function with matrix passed in
 
 template <typename T> void sum_diagonal(Matrix<T> matrix){
 	//Declare and initializes column number to 0
@@ -242,6 +277,9 @@ template <typename T> void sum_diagonal(Matrix<T> matrix){
 	//Prints ouput to terminal the Matrix secondary diagonal sum 
 	cout<<"Matrix Secondary Diagonal Sum"<< matrix_result_secondary_sum << "\n";
 }
+
+
+//Used ChatGPT for suggestions on creating a pair of matrices, helped debug a lot of this code.
 
 template <typename T>pair<Matrix<T>,Matrix<T>>create_matrices(string& matrix_text_file){
     cout << "In and our with type: " << typeid(T).name() << "\n";
@@ -346,6 +384,8 @@ template <typename T>pair<Matrix<T>,Matrix<T>>create_matrices(string& matrix_tex
 	return {matrix1,matrix2};
 }
 
+//Used ChatGPT for suggestions on establishing polymorphism with the derived classes and base class. WHiche ased the coding process for botht he Integer and Double Matrix class with function as well
+
 //Definition of IntegerMatrix class, inheriting from Matrix
 class IntegerMatrix:public Matrix<int>{
     //Public section of the class where accessible outside of the class
@@ -383,6 +423,10 @@ class DoubleMatrix:public Matrix<double>{
             return Matrix<double>::swap_columns(column_num_1,column_num_2);
         }
 };
+
+
+//Used ChatGPT for suggestions on swapping rows and columns function
+
 //Function that return a matrix with its rows swapped, takes in a matrix object, integer row num 1 and 2 as input
 template <typename T>
 Matrix<T>Matrix<T>::swap_rows(int row_num_1,int row_num_2) {
@@ -490,6 +534,9 @@ Matrix<T> Matrix<T>::swap_columns(int column_num_1,int column_num_2) {
 	}
 }
 
+
+//Used ChatGPT for suggestions on updating the matrix function
+
 //Function that returns a updated matrix object with integer row,column, and value passed in as argument to update matrix at row by column location with new value
 template <typename T>
 Matrix<T>Matrix<T>::update_matrix(Matrix<T>& matrix,int row,int column, T value) {
@@ -503,18 +550,33 @@ Matrix<T>Matrix<T>::update_matrix(Matrix<T>& matrix,int row,int column, T value)
 
 
 
-
+//Template function that takes in a string matrix text file passed in as argument, with T type value,
 template <typename T> 
 void choice_selection(string matrix_text_file) {
-    cout << "In and out with type: " << typeid(T).name() << "\n";
+
+	//Declares and initializes pair of matrix 1 and 2  witht he create matrices function with the matrix text file passed inas argument as any T type value
 	pair<Matrix<T>,Matrix<T>> matrices = create_matrices<T>(matrix_text_file);
+	//Declres and initializes matrix 1 and 2 with the pair of matrices passed in
 	Matrix<T> matrix_1= matrices.first;
 	Matrix<T> matrix_2= matrices.second;
 	
+	//Prints the matrix 1 and 2 to output termial display
 	matrix_1.print_grid();
 	matrix_2.print_grid();
+	//Provides newline spacing in output terminal display
 	cout<<"\n";
+
+
+	default_matrix_1 = matrix_1;
+	default_matrix_2 = matrix_2;
+
+
 	matrix_1 = matrix_1.add_matrices(matrix_2);
+	matrix_1 = matrix_1.multiply_matrices(matrix_2);
+
+	sum_diagonal(matrix_1);
+
+
 	
 	
 	
@@ -527,7 +589,7 @@ void choice_selection(string matrix_text_file) {
 
 
 
-
+//Used ChatGPT for suggestions on creating the main function and the main entry point into the program
 
 //The main function of the program, the main entry point into the program
 int main(){
